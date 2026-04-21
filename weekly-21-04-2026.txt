@@ -1,0 +1,113 @@
+first weekly:
+—Weekly avec Karim.b
+>Mood board  = Palette de couleur type bourgogne:
+Chaque couleur rappelle nature et la qualité 
+Rouge = vin, etc …
+Couleurs fonctionnels
+
+Typographie longue et visible pour ressortir et rappelle ferme local
+
+>Ton edition :
+Vouvoiement
+Toujours ramener vers qualité
+Eviter comparaison avec industrie
+
+Logo rappelle boulangerie 
+Grappe, vin, etc …
+
+>Bouton fonctionnel:
+Karim aka Kevin aime bien les couleurs
+Mais il aurait fais un meilleur logo :C
+
+Logo bourgogne pour insister sur l’aspect local
+
+Maquette base fidelite (Karim n’ai pas intéressé de la basse fidélité), ça ne lui parlais pas
+Préfère haute fidélité
+
+Aimerais overlay telephone pour visualiser
+
+Mention legal trop petit penser au gros doigt de michel 🙂
+
+PB : Modifier image pain levain dans la maquette haute fidélité 
+
+Plusieurs gamme de produit modifier en catégorie ou autre
+
+Card pour produits : photo et quelque info rapide
+Element de filtrage mis en evidence si filtre appliquer
+
+PB : Ne vois pas si on peut acheter des produits sur la page :
+-Introduction sur la page d’accueil qui se superpose facilement fermable?
+
+Penser a michel pour la creation de compte faciliter la creation de compte 🙂
+Penser au producteurs / acheteur sont âgé
+
+element visuel a rajouter lorsqu’on on clique sur un element pour se déplacer, savoir où on est
+
+PB : Comment créer un nouveau produit : nouvelle page de creation de produit
+Romy bzz bzz bzz🐝 — 15:40
+Weekly n°1 21/04/2026:
+—Weekly avec Karim Benchouia
+
+ce qui a été fait la semaine précédente : 
+marketing : 
+benchmark
+l’identité visuelle de l’application 
+maquette basse fidélité sur Figma
+en cours de création de la maquette haute fidélité
+programmation :
+rien
+
+à rajouter : 
+marketing : 
+overlay téléphone pour mieux visualiser
+over/changement de couleur du bouton actuel sur la navbar pour savoir où on se trouve dans l’appli
+introduction rapide sur la page d’accueil pour bien comprendre ce qu’est SaôneLocal
+sur la page d’accueil, on ne peut pas voir si on peut acheter les produits
+nouvelle page/formulaire pour ajouter un produit en tant que producteur où on peut ajouter la nom, la description, le prix, etc...
+programmation :
+rien
+
+à modifier : 
+marketing : 
+mentions légales est en trop petit → footer avec navigation en plus, “fabriqué en bourgogne”, mentions légales, contact
+modifier image du pain levain sur la maquette haute fidélité
+plusieurs gammes de produits à modifier en “catégories” ou autre
+mettre en avant le/les filtre(s) choisi(s) quand on applique les filtres souhaités
+faciliter la création de compte
+programmation :
+rien
+
+problèmes : 
+marketing : 
+travail très long, besoin de temps
+programmation :
+rien
+
+idées/choses/remarques bonus : 
+marketing : 
+rien
+programmation :
+rien
+
+objectifs globaux : 
+23 avril: project management
+29 avril: data modeling
+7 mai : envoyer livrables data modeling (mdc + mld) 
+11 mai : déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+tâches de la semaine prochaine : 
+marketing : 
+finir les maquettes hautes fidélités
+faire les dossiers de préparation à l’intégration pour les pro
+programmation :
+rien
+ensemble : 
+23 → 28 AVRIL
+Project Management :
+4 jours
+Mise en place du repo GitHub, CI/CD de base, backlog des user stories avec les marketing.

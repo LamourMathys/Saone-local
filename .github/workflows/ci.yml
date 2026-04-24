@@ -12,4 +12,4 @@ jobs:
         run: test -f readme.md
 
       - name: Vérifier les .txt
-        run: find . -name "*.txt" | grep .
+        run: find ./weeklys -name "*.txt" | grep .

@@ -3,7 +3,13 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  nothing:
+  check-files:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "OK"
+      - uses: actions/checkout@v3
+
+      - name: Vérifier le README
+        run: test -f readme.md
+
+      - name: Vérifier les .txt
+        run: find . -name "*.txt" | grep .

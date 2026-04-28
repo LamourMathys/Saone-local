@@ -13,3 +13,6 @@ jobs:
 
       - name: Vérifier les .txt
         run: find ./weeklys -name "*.txt" | grep .
+
+      - name: Vérifier si il y a des fichiers dans le dossier "Livrables"
+        run: find ./Livrables -type f | grep .

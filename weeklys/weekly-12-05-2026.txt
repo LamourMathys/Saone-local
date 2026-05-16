@@ -1,1 +1,51 @@
+Weekly n°3 05/05/2026 :
+Ce qui a été fait la semaine précédente :
+Marketing :
+rien
+Programmation :
+tout l environnement à été push :  dépendances et tout le nécessaire pour commencer à développer
+quasi fini déploiement sur le serveur 
+
+À rajouter :
+Marketing :
+rien
+Programmation :
+Rien
+
+À modifier :
+Marketing :
+rien
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+Rien
+
+objectifs globaux : 
+envoyer livrables data modeling (mdc + mld) 
+déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+rien
+Programmation :
+github pour le mcd et mld en préparation
+Ensemble :
+rien
 

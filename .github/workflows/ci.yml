@@ -52,7 +52,7 @@ jobs:
             sudo docker rm saone-local || true
             sudo docker run -d \
               --name saone-local \
-              -p 80:80 \
+              -p 80:3000 \
               -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
               ghcr.io/lamourmathys/saone-local:latest

@@ -30,12 +30,12 @@ jobs:
           key: ${{ secrets.EC2_SSHKEY }}
           script: |
             echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker pull ghcr.io/${{ github.repository_owner }}/Saone-local:latest
-            sudo docker stop Saone-local || true
-            sudo docker rm Saone-local || true
+            sudo docker pull ghcr.io/${{ github.repository_owner }}/saone-local:latest
+            sudo docker stop saone-local || true
+            sudo docker rm saone-local || true
             sudo docker run -d \
-              --name Saone-local \
+              --name saone-local \
               -p 80:80 \
               -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
-              ghcr.io/${{ github.repository_owner }}/Saone-local:latest
+              ghcr.io/${{ github.repository_owner }}/saone-local:latest

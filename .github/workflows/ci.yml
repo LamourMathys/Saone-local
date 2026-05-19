@@ -21,6 +21,8 @@ jobs:
     name: Build & Push Docker image
     runs-on: ubuntu-latest
     needs: check-files
+    permissions:
+      packages: write
     steps:
       - uses: actions/checkout@v3
 

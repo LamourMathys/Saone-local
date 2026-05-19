@@ -16,3 +16,26 @@ jobs:
 
       - name: Vérifier si il y a des fichiers dans le dossier "Livrables"
         run: find ./Livrables -type f | grep .
+
+  deploy-to-ec2:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: check-files
+    steps:
+      - name: Déploiement via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSHKEY }}
+          script: |
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            sudo docker pull ghcr.io/${{ github.repository_owner }}/Saone-local:latest
+            sudo docker stop Saone-local || true
+            sudo docker rm Saone-local || true
+            sudo docker run -d \
+              --name Saone-local \
+              -p 80:80 \
+              -p 443:443 \
+              -v /etc/letsencrypt:/etc/letsencrypt:ro \
+              ghcr.io/${{ github.repository_owner }}/Saone-local:latest

@@ -39,3 +39,18 @@ jobs:
               -p 443:443 \
               -v /etc/letsencrypt:/etc/letsencrypt:ro \
               ghcr.io/lamourmathys/saone-local:latest
+
+  build-and-push:
+    name: Build & Push Docker image
+    runs-on: ubuntu-latest
+    needs: check-files
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build & Push
+        run: |
+          docker build -t ghcr.io/lamourmathys/saone-local:latest .
+          docker push ghcr.io/lamourmathys/saone-local:latest

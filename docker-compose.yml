@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - server/.env
+    deploy-to-ec2:
+    needs: build-and-push

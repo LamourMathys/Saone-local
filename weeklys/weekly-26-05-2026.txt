@@ -1,1 +1,51 @@
+Weekly n°6 26/05/2026 :
+Ce qui a été fait la semaine précédente :
+Marketing :
+maquette avec une version au fond grisée quand il y a un pop up ou une deamnde
+Programmation :
+data base créée
+
+À rajouter :
+Marketing :
+rien
+Programmation :
+back-end
+compléter le mcd 
+
+À modifier :
+Marketing :
+rien
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+Rien
+
+objectifs globaux : 
+déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+rien
+Programmation :
+back-end
+compléter le mcd 
+Ensemble :
+rien
 

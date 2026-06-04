@@ -76,6 +76,36 @@ const seed = async () => {
   );
 
   await pool.query(
+    `INSERT INTO products (producer_id, category_id, product_name, description, price, unit, stock, product_photo)
+ VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [
+      1,
+      3,
+      "Carottes",
+      "Botte de carottes bio du jardin.",
+      2.5,
+      "botte",
+      30,
+      "https://exemple.com/photo.jpg",
+    ],
+  );
+
+  await pool.query(
+    `INSERT INTO products (producer_id, category_id, product_name, description, price, unit, stock, product_photo)
+ VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    [
+      1,
+      2,
+      "Bourgogne Rouge",
+      "Bouteille de vin rouge local.",
+      14,
+      "bouteille",
+      20,
+      "https://exemple.com/photo.jpg",
+    ],
+  );
+
+  await pool.query(
     `INSERT INTO events (title, location, event_date, description)
  VALUES ($1, $2, $3, $4)`,
     [

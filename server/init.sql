@@ -15,16 +15,15 @@ CREATE TABLE users (
 CREATE TABLE producers (
   id             SERIAL PRIMARY KEY,
   user_id        INTEGER UNIQUE NOT NULL REFERENCES users(id),
-  producer_name  VARCHAR,
-  description    VARCHAR,
-  producer_photo VARCHAR,
   shop_location  VARCHAR,
-  created_at     TIMESTAMP DEFAULT NOW()
+  business_name  VARCHAR,
+  siret          INTEGER
 );
 
 CREATE TABLE categories (
-  id   SERIAL PRIMARY KEY,
-  name VARCHAR UNIQUE
+  id            SERIAL PRIMARY KEY,
+  name          VARCHAR UNIQUE,
+  description   VARCHAR
 );
 
 CREATE TABLE products (
@@ -41,20 +40,20 @@ CREATE TABLE products (
 );
 
 CREATE TABLE orders (
-  id          SERIAL PRIMARY KEY,
-  user_id     INTEGER REFERENCES users(id),
-  producer_id INTEGER REFERENCES producers(id),
-  status      VARCHAR DEFAULT 'nouvelle',
-  total_price DECIMAL,
-  created_at  TIMESTAMP DEFAULT NOW()
+  id            SERIAL PRIMARY KEY,
+  user_id       INTEGER REFERENCES users(id),
+  producer_id   INTEGER REFERENCES producers(id),
+  status        VARCHAR DEFAULT 'nouvelle',
+  total_price   DECIMAL,
+  created_at    TIMESTAMP DEFAULT NOW(),
+  completed_at  TIMESTAMP
 );
 
 CREATE TABLE order_items (
   id         SERIAL PRIMARY KEY,
   order_id   INTEGER REFERENCES orders(id),
   product_id INTEGER REFERENCES products(id),
-  quantity   INTEGER,
-  unit_price DECIMAL
+  quantity   INTEGER
 );
 
 CREATE TABLE favorites (
@@ -67,7 +66,14 @@ CREATE TABLE favorites (
 CREATE TABLE events (
   id          SERIAL PRIMARY KEY,
   title       VARCHAR,
+  description VARCHAR,
   location    VARCHAR,
   event_date  TIMESTAMP,
-  description VARCHAR
+  creator_id  INTEGER REFERENCES users(id)
 );
+
+CREATE TABLE event_participants (
+  id          SERIAL PRIMARY KEY,
+  event_id    INTEGER REFERENCES events(id),
+  role        VARCHAR
+)

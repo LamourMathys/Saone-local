@@ -11,10 +11,10 @@ const seed = async () => {
     "INSERT INTO categories (name) VALUES ($1), ($2), ($3), ($4), ($5), ($6) ON CONFLICT (name) DO NOTHING",
     ["Pain", "Vin", "Légumes", "Œufs", "fruits", "Poissons"],
   );
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - //
   await pool.query(
     `INSERT INTO users (first_name, last_name, email, password, role, provider)
-    VALUES 
+    VALUES
     ($1, $2, $3, $4, $5, $6),
     ($7, $8, $9, $10, $11, $12),
     ($13, $14, $15, $16, $17, $18),
@@ -47,22 +47,42 @@ const seed = async () => {
       "local",
     ],
   );
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - //
+let newly_created_user_id
+await pool.query(
+  `INSERT INTO users (first_name, last_name, email, password, role, provider)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      ON CONFLICT (email) DO NOTHING`,
+      [
+        "Marée",
+        "Océane",
+        "maréeocéane@saonelocal.fr",
+        await bcrypt.hash("MDPsecurisemarée", 10),
+        "producteur",
+        "local",
+      ]
+      ,
+      function(err, result) {
+        if (!err) {
+          let newly_created_user_id = result.rows[0].id //error here
+          console.log(newly_created_user_id)
+        }
+      }
+  )
   await pool.query(
-    `INSERT INTO producers (user_id, producer_name, description, producer_photo, shop_location)
+    `INSERT INTO producers (user_id, shop_location, business_name, siret)
    VALUES ($1, $2, $3, $4, $5)`,
     [
-      1,
-      "Marée Océane",
-      "Producteur local de poissons",
-      "https://exemple.com/photo.jpg",
+      newly_created_user_id,
       "12 rue du Marché, Chalon-sur-Saône",
+      "PoissonLocal",
+      1234567890
     ],
   );
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - //
   await pool.query(
     `INSERT INTO products (producer_id, category_id, product_name, description, price, unit, stock, product_photo)
- VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       1,
       6,
@@ -77,7 +97,7 @@ const seed = async () => {
 
   await pool.query(
     `INSERT INTO products (producer_id, category_id, product_name, description, price, unit, stock, product_photo)
- VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       1,
       3,
@@ -92,7 +112,7 @@ const seed = async () => {
 
   await pool.query(
     `INSERT INTO products (producer_id, category_id, product_name, description, price, unit, stock, product_photo)
- VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
     [
       1,
       2,
@@ -104,12 +124,12 @@ const seed = async () => {
       "https://exemple.com/photo.jpg",
     ],
   );
-
+// - - - - - - - - - - - - - - - - - - - - - - - - - //
   await pool.query(
     `INSERT INTO events (title, location, event_date, description)
- VALUES ($1, $2, $3, $4)`,
+    VALUES ($1, $2, $3, $4)`,
     [
-      "Arrivée de TUNG TUNG TUNG SAHUR",
+      "Arrivée de TUNG TUNG TUNG SAHUR",    //Cinema.
       "67 rue du soixante-sept, Woippy",
       "2067-10-15",
       "Tung Tung Tung Sahur redescendra du paradis.",

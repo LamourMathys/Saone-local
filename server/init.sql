@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS event_participants CASCADE;
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS favorites CASCADE;
+DROP TABLE IF EXISTS order_items CASCADE;
+DROP TABLE IF EXISTS orders CASCADE;
+DROP TABLE IF EXISTS products CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS producers CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
 CREATE TABLE users (
   id          SERIAL PRIMARY KEY,
   first_name  VARCHAR,
@@ -76,4 +86,4 @@ CREATE TABLE event_participants (
   id          SERIAL PRIMARY KEY,
   event_id    INTEGER REFERENCES events(id),
   role        VARCHAR
-)
+);

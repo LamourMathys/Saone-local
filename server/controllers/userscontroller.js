@@ -65,7 +65,7 @@ exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     const { rows } = await pool.query(
-      "DELETE FROM user WHERE id = $1 RETURNING *",
+      "DELETE FROM users WHERE id = $1 RETURNING *",
       [id],
     );
     if (rows.length === 0) {

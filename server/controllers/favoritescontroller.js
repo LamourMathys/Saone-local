@@ -19,7 +19,7 @@ exports.getFavoriteById = async (req, res) => {
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Item de la commande non trouvé" });
+        .json({ success: false, error: "Favoris non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -74,7 +74,7 @@ exports.deleteFavorite = async (req, res) => {
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Item de la commande non trouvé" });
+        .json({ success: false, error: "Favoris non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {

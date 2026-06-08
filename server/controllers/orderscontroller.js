@@ -52,7 +52,7 @@ exports.updateOrder = async (req, res) => { //date_of_completion tba
   try {
     const { rows } = await pool.query(
       "UPDATE orders SET user_id = $1, producer_id = $2, status = $3, total_price = $4 WHERE id = $5 RETURNING *",
-      [user_id, producer_id, status, last_login, id],
+      [user_id, producer_id, status, id],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {

@@ -10,6 +10,7 @@ const eventsRoutes = require("./routes/eventsroute");
 const categoriesRoutes = require("./routes/categoriesroute");
 const usersRoutes = require("./routes/usersroute")
 const ordersRoutes = require("./routes/ordersroute")
+const orderitemsRoutes = require("./routes/orderitemsroute")
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use("/api/events", eventsRoutes);
 app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes)
 app.use("/api/orders", ordersRoutes)
+app.use("/api/orderitems", orderitemsRoutes)
 
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);

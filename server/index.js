@@ -11,6 +11,7 @@ const categoriesRoutes = require("./routes/categoriesroute");
 const usersRoutes = require("./routes/usersroute")
 const ordersRoutes = require("./routes/ordersroute")
 const orderitemsRoutes = require("./routes/orderitemsroute")
+const favoritesRoutes = require("./routes/favoritesroute")
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.use("/api/categories", categoriesRoutes);
 app.use("/api/users", usersRoutes)
 app.use("/api/orders", ordersRoutes)
 app.use("/api/orderitems", orderitemsRoutes)
+app.use("/api/favorites", favoritesRoutes)
 
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);

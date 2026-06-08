@@ -1,1 +1,61 @@
+Weekly n°7 02/06/2026 :
+Ce qui a été fait la semaine précédente :
+Marketing :
+rien
+Programmation :
+back end commencé 
+routes faites pour les produits et les producteurs
+on peut ajouter supprimer et voir tous les profils/produits
+avec vérification si on est producteur et si on est admin
+métiers séparés 
+routes avec routes
+contrôleurs avec contrôleurs
+vérifications avec vérifications
 
+À rajouter :
+Marketing :
+historique de toutes les commandes faites et l’historique des produits qu’il a vendu côté producteur pour voir tout ce qu’il a vendu (produits hiver qu’il aurait supprimé et peut remettre juste en allant voir son historique)
+Programmation :
+d’autres routes
+d’autres contrôleurs a faire
+mettre la data base sur le serveur
+user story de l’historique des commandes passées côté producteur et des produits vendus 
+
+À modifier :
+Marketing :
+rien
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+Rien
+
+objectifs globaux : 
+déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+historique de toutes  les commandes faites et l historique des produits qu’il a vendu cote producteur   pour voir tout ce qu’il a vendu (produits hiver qu’il aurait supprimé et peut remettre juste en allant voir son historique)
+Programmation :
+d’autres routes
+d’autres contrôleurs a faire
+mettre la data base sur le serveur
+user story de l’historique des commandes passées côté producteur et des produits vendus 
+Ensemble :
+rien

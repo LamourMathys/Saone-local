@@ -42,9 +42,6 @@ Programmation :
 Rien
 
 objectifs globaux : 
-déploiement 
-12 mai : monthly avec staff
-13 mai : back-end + bdd
 9 juin : monthly avec staff
 15 juin: front-end
 3 juillet : fin du projet (soutenance plus tard)

@@ -2,12 +2,29 @@ const express = require("express");
 const router = express.Router();
 const producerscontroller = require("../controllers/producerscontroller");
 
-const { verifyProducer } = require("../controllers/producerverification");
-const { verifyAdmin } = require("../controllers/adminverification");
+const authenticateToken = require("../verification/authverification");
+const { verifyProducer } = require("../verification/producerverification");
 
 router.get("/", producerscontroller.getAllProducers);
 router.get("/:id", producerscontroller.getProducerById);
-router.post("/", verifyProducer, producerscontroller.createProducer);
-router.put("/:id", verifyProducer, producerscontroller.updateProducer);
-router.delete("/:id", verifyProducer, producerscontroller.deleteProducer);
+
+router.post(
+  "/",
+  authenticateToken,
+  verifyProducer,
+  producerscontroller.createProducer,
+);
+router.put(
+  "/:id",
+  authenticateToken,
+  verifyProducer,
+  producerscontroller.updateProducer,
+);
+router.delete(
+  "/:id",
+  authenticateToken,
+  verifyProducer,
+  producerscontroller.deleteProducer,
+);
+
 module.exports = router;

@@ -30,11 +30,11 @@ exports.getCategoryById = async (req, res) => {
 };
 
 exports.createCategory = async (req, res) => {
-  const { name } = req.body;
+  const { name, description } = req.body;
   try {
     const { rows } = await pool.query(
-      "INSERT INTO categories (name) VALUES ($1) RETURNING *",
-      [name],
+      "INSERT INTO categories (name, description) VALUES ($1, $2) RETURNING *",
+      [name, description],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -45,11 +45,11 @@ exports.createCategory = async (req, res) => {
 
 exports.updateCategory = async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, description } = req.body;
   try {
     const { rows } = await pool.query(
-      "UPDATE categories SET name = $1 WHERE id = $2 RETURNING *",
-      [name, id],
+      "UPDATE categories SET name = $1, description = $2 WHERE id = $3 RETURNING *",
+      [name, description, id],
     );
     if (rows.length === 0) {
       return res

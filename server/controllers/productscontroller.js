@@ -71,18 +71,17 @@ exports.updateProduct = async (req, res) => {
     req.body;
 
   try {
-    await pool.query(
+    const { rows } = await pool.query(
       "UPDATE products SET product_name = $1, description = $2, price = $3, unit = $4, stock = $5, product_photo = $6 WHERE id = $7 RETURNING *",
       [product_name, description, price, unit, stock, product_photo, id],
     );
-    const { rows } = await pool.query("SELECT * FROM products WHERE id = $1", [
-      id,
-    ]);
+
     if (rows.length === 0) {
       return res
         .status(404)
         .json({ success: false, error: "Produit non trouvé" });
     }
+
     res.json({ success: true, data: rows[0] });
   } catch (error) {
     console.error(error);

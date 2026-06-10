@@ -49,15 +49,9 @@ const seed = async () => {
   );
 
   await pool.query(
-    `INSERT INTO producers (user_id, producer_name, description, producer_photo, shop_location)
-   VALUES ($1, $2, $3, $4, $5)`,
-    [
-      1,
-      "Marée Océane",
-      "Producteur local de poissons",
-      "https://exemple.com/photo.jpg",
-      "12 rue du Marché, Chalon-sur-Saône",
-    ],
+    `INSERT INTO producers (user_id, business_name, shop_location)
+   VALUES ($1, $2, $3)`,
+    [1, "Marée Océane", "12 rue du Marché, Chalon-sur-Saône"],
   );
 
   await pool.query(

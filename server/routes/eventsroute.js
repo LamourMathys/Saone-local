@@ -2,12 +2,24 @@ const express = require("express");
 const router = express.Router();
 const eventscontroller = require("../controllers/eventscontroller");
 
-const { verifyAdmin } = require("../controllers/adminverification");
+const authenticateToken = require("../verification/authverification");
+const { verifyAdmin } = require("../verification/adminverification");
 
 router.get("/", eventscontroller.getAllEvents);
 router.get("/:id", eventscontroller.getEventById);
-router.post("/", verifyAdmin, eventscontroller.createEvent);
-router.put("/:id", verifyAdmin, eventscontroller.updateEvent);
-router.delete("/:id", verifyAdmin, eventscontroller.deleteEvent);
+
+router.post("/", authenticateToken, verifyAdmin, eventscontroller.createEvent);
+router.put(
+  "/:id",
+  authenticateToken,
+  verifyAdmin,
+  eventscontroller.updateEvent,
+);
+router.delete(
+  "/:id",
+  authenticateToken,
+  verifyAdmin,
+  eventscontroller.deleteEvent,
+);
 
 module.exports = router;

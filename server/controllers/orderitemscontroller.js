@@ -1,8 +1,8 @@
 const pool = require("../db");
 
-exports.getAllOrders = async (req, res) => {
+exports.getAllOrderItems = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM orders");
+    const { rows } = await pool.query("SELECT * FROM order_items");
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error(error);
@@ -10,16 +10,16 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-exports.getOrderrById = async (req, res) => {
+exports.getOrderItemById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM orders WHERE id = $1", [
+    const { rows } = await pool.query("SELECT * FROM order_items WHERE id = $1", [
       id,
     ]);
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Item de la commande non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -28,14 +28,15 @@ exports.getOrderrById = async (req, res) => {
   }
 };
 
-exports.createOrder = async (req, res) => {
-  const { user_id, producer_id } =
+exports.createOrderItem = async (req, res) => {
+    // Only the user who owns the order should be able to create order items, and only if the order wasn't already completed
+  const { order_id, product_id, quantity } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "INSERT INTO orders (user_id, producer_id,total_price) VALUES ($1, $2, $3) RETURNING *",
-      [user_id, producer_id, 0],
+      "INSERT INTO order_items (order_id, product_id, quantity) VALUES ($1, $2, $3) RETURNING *",
+      [order_id, product_id, quantity],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -44,15 +45,15 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.updateOrder = async (req, res) => { //date_of_completion tba
+exports.updateOrderItem = async (req, res) => { // Shouldn't be used outside of debugging
   const { id } = req.params;
-  const { user_id, producer_id, status, total_price } =
+  const { order_id, product_id, quantity } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "UPDATE orders SET user_id = $1, producer_id = $2, status = $3, total_price = $4 WHERE id = $5 RETURNING *",
-      [user_id, producer_id, status, id],
+      "UPDATE order_items SET order_id = $1, product_id = $2, quantity = $3 WHERE id = $4 RETURNING *",
+      [order_id, product_id, quantity, id],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -61,17 +62,18 @@ exports.updateOrder = async (req, res) => { //date_of_completion tba
   }
 };
 
-exports.deleteOrder = async (req, res) => { 
+exports.deleteOrderItem = async (req, res) => {
+    // Only the user who owns the order should be able to delete order items, and only if the order wasn't already completed
   const { id } = req.params;
   try {
     const { rows } = await pool.query(
-      "DELETE FROM orders WHERE id = $1 RETURNING *",
+      "DELETE FROM order_items WHERE id = $1 RETURNING *",
       [id],
     );
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Item de la commande non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {

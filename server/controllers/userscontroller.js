@@ -1,8 +1,8 @@
 const pool = require("../db");
 
-exports.getAllOrders = async (req, res) => {
+exports.getAllUsers = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM orders");
+    const { rows } = await pool.query("SELECT * FROM users");
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error(error);
@@ -10,16 +10,16 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-exports.getOrderrById = async (req, res) => {
+exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM orders WHERE id = $1", [
+    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
       id,
     ]);
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Utilisateur non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -28,14 +28,14 @@ exports.getOrderrById = async (req, res) => {
   }
 };
 
-exports.createOrder = async (req, res) => {
-  const { user_id, producer_id } =
+exports.createUser = async (req, res) => {
+  const { first_name, last_name, email, password, role, provider, provider_id, user_photo } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "INSERT INTO orders (user_id, producer_id,total_price) VALUES ($1, $2, $3) RETURNING *",
-      [user_id, producer_id, 0],
+      "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [first_name, last_name, email, password, role, provider, provider_id, user_photo],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -44,15 +44,15 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.updateOrder = async (req, res) => { //date_of_completion tba
+exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { user_id, producer_id, status, total_price } =
+  const { first_name, last_name, email, password, role, provider, provider_id, user_photo, last_login } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "UPDATE orders SET user_id = $1, producer_id = $2, status = $3, total_price = $4 WHERE id = $5 RETURNING *",
-      [user_id, producer_id, status, id],
+      "UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, role = $5, provider = $6, provider_id = $7, user_photo = $8, last_login = $9 WHERE id = $10 RETURNING *",
+      [first_name, last_name, email, password, role, provider, provider_id, user_photo, last_login, id],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -61,17 +61,17 @@ exports.updateOrder = async (req, res) => { //date_of_completion tba
   }
 };
 
-exports.deleteOrder = async (req, res) => { 
+exports.deleteUser = async (req, res) => {
   const { id } = req.params;
   try {
     const { rows } = await pool.query(
-      "DELETE FROM orders WHERE id = $1 RETURNING *",
+      "DELETE FROM users WHERE id = $1 RETURNING *",
       [id],
     );
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Utilisateur non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {

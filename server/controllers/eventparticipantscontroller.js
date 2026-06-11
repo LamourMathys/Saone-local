@@ -1,8 +1,8 @@
 const pool = require("../db");
 
-exports.getAllOrders = async (req, res) => {
+exports.getAllEventParticipants = async (req, res) => { 
   try {
-    const { rows } = await pool.query("SELECT * FROM orders");
+    const { rows } = await pool.query("SELECT * FROM event_participants");
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error(error);
@@ -10,16 +10,16 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-exports.getOrderrById = async (req, res) => {
+exports.getEventParticipantById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM orders WHERE id = $1", [
+    const { rows } = await pool.query("SELECT * FROM event_participants WHERE id = $1", [
       id,
     ]);
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Participant d'événement non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -28,14 +28,14 @@ exports.getOrderrById = async (req, res) => {
   }
 };
 
-exports.createOrder = async (req, res) => {
-  const { user_id, producer_id } =
+exports.createEventParticipant= async (req, res) => { 
+  const { user_id, event_id, role } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "INSERT INTO orders (user_id, producer_id,total_price) VALUES ($1, $2, $3) RETURNING *",
-      [user_id, producer_id, 0],
+      "INSERT INTO event_participants (user_id, event_id, role) VALUES ($1, $2, $3) RETURNING *",
+      [user_id, event_id, role],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -44,15 +44,15 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.updateOrder = async (req, res) => { //date_of_completion tba
+exports.updateEventParticipant = async (req, res) => { // Shouldn't be used outside of debugging
   const { id } = req.params;
-  const { user_id, producer_id, status, total_price } =
+  const { user_id, event_id, role } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "UPDATE orders SET user_id = $1, producer_id = $2, status = $3, total_price = $4 WHERE id = $5 RETURNING *",
-      [user_id, producer_id, status, id],
+      "UPDATE event_participants SET user_id = $1, event_id = $2, role = $3 WHERE id = $4 RETURNING *",
+      [user_id, event_id, role, id],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -61,17 +61,17 @@ exports.updateOrder = async (req, res) => { //date_of_completion tba
   }
 };
 
-exports.deleteOrder = async (req, res) => { 
+exports.deleteEventParticipant = async (req, res) => {
   const { id } = req.params;
   try {
     const { rows } = await pool.query(
-      "DELETE FROM orders WHERE id = $1 RETURNING *",
+      "DELETE FROM event_participants WHERE id = $1 RETURNING *",
       [id],
     );
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Participant d'événement non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {

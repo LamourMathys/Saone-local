@@ -1,8 +1,8 @@
 const pool = require("../db");
 
-exports.getAllOrders = async (req, res) => {
+exports.getAllFavorites = async (req, res) => { // Only admins should be able to see (for stats perhaps?)
   try {
-    const { rows } = await pool.query("SELECT * FROM orders");
+    const { rows } = await pool.query("SELECT * FROM favorites");
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error(error);
@@ -10,16 +10,16 @@ exports.getAllOrders = async (req, res) => {
   }
 };
 
-exports.getOrderrById = async (req, res) => {
+exports.getFavoriteById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM orders WHERE id = $1", [
+    const { rows } = await pool.query("SELECT * FROM favorites WHERE id = $1", [
       id,
     ]);
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Favoris non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -28,14 +28,16 @@ exports.getOrderrById = async (req, res) => {
   }
 };
 
-exports.createOrder = async (req, res) => {
-  const { user_id, producer_id } =
+exports.createFavorite= async (req, res) => { 
+    // a user should only be able to create a favorite for themself
+    // product_id XOR producer_id (Cannot have both)
+  const { user_id, product_id, producer_id } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "INSERT INTO orders (user_id, producer_id,total_price) VALUES ($1, $2, $3) RETURNING *",
-      [user_id, producer_id, 0],
+      "INSERT INTO favorites (user_id, product_id, producer_id) VALUES ($1, $2, $3) RETURNING *",
+      [user_id, product_id, producer_id],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -44,15 +46,15 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-exports.updateOrder = async (req, res) => { //date_of_completion tba
+exports.updateFavorite = async (req, res) => { // Shouldn't be used outside of debugging
   const { id } = req.params;
-  const { user_id, producer_id, status, total_price } =
+  const { user_id, product_id, producer_id } =
     req.body;
 
   try {
     const { rows } = await pool.query(
-      "UPDATE orders SET user_id = $1, producer_id = $2, status = $3, total_price = $4 WHERE id = $5 RETURNING *",
-      [user_id, producer_id, status, id],
+      "UPDATE favorites SET user_id = $1, product_id = $2, producer_id = $3 WHERE id = $4 RETURNING *",
+      [user_id, product_id, producer_id, id],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {
@@ -61,17 +63,18 @@ exports.updateOrder = async (req, res) => { //date_of_completion tba
   }
 };
 
-exports.deleteOrder = async (req, res) => { 
+exports.deleteFavorite = async (req, res) => {
+    // Only the user who owns the favorite should be able to delete it
   const { id } = req.params;
   try {
     const { rows } = await pool.query(
-      "DELETE FROM orders WHERE id = $1 RETURNING *",
+      "DELETE FROM favorites WHERE id = $1 RETURNING *",
       [id],
     );
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Commande non trouvé" });
+        .json({ success: false, error: "Favoris non trouvé" });
     }
     res.json({ success: true, data: rows[0] });
   } catch (error) {

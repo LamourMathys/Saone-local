@@ -5,6 +5,7 @@ const authenticateToken = require("../verification/authverification");
 
 router.post("/register", authController.register);
 router.post("/login", authController.login);
+router.post("/logout", authController.logout);
 
 router.put("/:id", authenticateToken, authController.updateUser);
 router.delete("/:id", authenticateToken, authController.deleteUser);

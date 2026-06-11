@@ -7,6 +7,7 @@ DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS producers CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS refresh_tokens CASCADE;
 
 CREATE TABLE users (
   id          SERIAL PRIMARY KEY,
@@ -86,4 +87,11 @@ CREATE TABLE event_participants (
   id          SERIAL PRIMARY KEY,
   event_id    INTEGER REFERENCES events(id),
   role        VARCHAR
+);
+
+CREATE TABLE refresh_tokens (
+  id          SERIAL PRIMARY KEY,
+  token       TEXT NOT NULL,
+  user_id     INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at  TIMESTAMP NOT NULL
 );

@@ -45,22 +45,59 @@ exports.login = async (req, res) => {
     const user = result.rows[0];
 
     if (!user) {
-      return res.status(401).json({ message: "False email or password" });
+      return res
+        .status(401)
+        .json({ success: false, error: "Email ou mot de passe incorrect." });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "False email or password" });
+      return res
+        .status(401)
+        .json({ success: false, error: "Email ou mot de passe incorrect." });
     }
 
-    const token = jwt.sign(
+    const accessToken = jwt.sign(
       { userId: user.id, role: user.role },
       process.env.JWT_SECRET,
+      { expiresIn: "15m" },
     );
-    res.json({ token });
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: "30d" },
+    );
+
+    await pool.query(
+      "INSERT INTO refresh_tokens (token, user_id, expires_at) VALUES ($1, $2, NOW() + INTERVAL '30 days') ON CONFLICT (user_id) DO UPDATE SET token = EXCLUDED.token, expires_at = EXCLUDED.expires_at",
+      [refreshToken, user.id],
+    );
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
+    res.json({ success: true, message: "Connexion réussie" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error" });
+    res
+      .status(500)
+      .json({
+        success: false,
+        error: "Une erreur serveur est survenue lors de la connexion.",
+      });
   }
 };
 
@@ -131,4 +168,66 @@ exports.deleteUser = async (req, res) => {
       error: "Une erreur est survenue lors de la suppression.",
     });
   }
+};
+
+exports.refreshToken = async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  if (!refreshToken) {
+    return res
+      .status(401)
+      .json({ success: false, error: "Refresh Token manquant." });
+  }
+
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM refresh_tokens WHERE token = $1",
+      [refreshToken],
+    );
+    if (rows.length === 0) {
+      return res
+        .status(403)
+        .json({ success: false, error: "Refresh Token invalide ou révoqué." });
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
+
+    const userResult = await pool.query(
+      "SELECT id, role FROM users WHERE id = $1",
+      [decoded.userId],
+    );
+    const user = userResult.rows[0];
+
+    const newAccessToken = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" },
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.json({ success: true });
+  } catch (err) {
+    res.status(403).json({
+      success: false,
+      error: "Session expirée, veuillez vous reconnecter.",
+    });
+  }
+};
+
+exports.logout = async (req, res) => {
+  const { refreshToken } = req.cookies;
+  if (refreshToken) {
+    await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+      refreshToken,
+    ]);
+  }
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+  res.json({ message: "Déconnexion réussie" });
 };

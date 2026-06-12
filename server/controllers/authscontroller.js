@@ -3,12 +3,21 @@ const jwt = require("jsonwebtoken");
 const pool = require("../db");
 
 exports.register = async (req, res) => {
-  const { first_name, last_name, email, password, role } = req.body;
+  const { first_name, last_name, email, password } = req.body;
   try {
     const userExists = await pool.query(
       "SELECT * FROM users WHERE email = $1",
       [email],
     );
+
+    //si il lmanque une info la creation est rejete
+    if (!first_name || !last_name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "Tous les champs sont obligatoires.",
+      });
+    }
+
     if (userExists.rows.length > 0) {
       return res
         .status(409)
@@ -19,7 +28,7 @@ exports.register = async (req, res) => {
 
     const { rows } = await pool.query(
       "INSERT INTO users (first_name, last_name, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, first_name, last_name, email, role",
-      [first_name, last_name, email, hashedPassword, role || "client"],
+      [first_name, last_name, email, hashedPassword, "client"],
     );
 
     res.status(201).json({
@@ -92,12 +101,10 @@ exports.login = async (req, res) => {
     res.json({ success: true, message: "Connexion réussie" });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        error: "Une erreur serveur est survenue lors de la connexion.",
-      });
+    res.status(500).json({
+      success: false,
+      error: "Une erreur serveur est survenue lors de la connexion.",
+    });
   }
 };
 
@@ -221,13 +228,43 @@ exports.refreshToken = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-  const { refreshToken } = req.cookies;
-  if (refreshToken) {
-    await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
-      refreshToken,
-    ]);
+  const { refreshToken, accessToken } = req.cookies;
+
+  if (!refreshToken && !accessToken) {
+    return res.status(401).json({
+      success: false,
+      error: "Vous n'êtes pas connecté.",
+    });
   }
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
-  res.json({ message: "Déconnexion réussie" });
+
+  try {
+    if (refreshToken) {
+      await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+        refreshToken,
+      ]);
+    }
+
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      success: true,
+      message: "Déconnexion réussie.",
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      error: "Une erreur est survenue lors de l'inscription.",
+    });
+  }
 };

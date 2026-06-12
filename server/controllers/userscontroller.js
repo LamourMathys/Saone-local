@@ -29,13 +29,30 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.createUser = async (req, res) => {
-  const { first_name, last_name, email, password, role, provider, provider_id, user_photo } =
-    req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    password,
+    role,
+    provider,
+    provider_id,
+    user_photo,
+  } = req.body;
 
   try {
     const { rows } = await pool.query(
       "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [first_name, last_name, email, password, role, provider, provider_id, user_photo],
+      [
+        first_name,
+        last_name,
+        email,
+        password,
+        role,
+        provider,
+        provider_id,
+        user_photo,
+      ],
     );
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
@@ -46,13 +63,33 @@ exports.createUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { first_name, last_name, email, password, role, provider, provider_id, user_photo, last_login } =
-    req.body;
+  const {
+    first_name,
+    last_name,
+    email,
+    password,
+    role,
+    provider,
+    provider_id,
+    user_photo,
+    last_login,
+  } = req.body;
 
   try {
     const { rows } = await pool.query(
       "UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, role = $5, provider = $6, provider_id = $7, user_photo = $8, last_login = $9 WHERE id = $10 RETURNING *",
-      [first_name, last_name, email, password, role, provider, provider_id, user_photo, last_login, id],
+      [
+        first_name,
+        last_name,
+        email,
+        password,
+        role,
+        provider,
+        provider_id,
+        user_photo,
+        last_login,
+        id,
+      ],
     );
     res.json({ success: true, data: rows[0] });
   } catch (error) {

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (req, res, next) => {
+exports.verifyAuth = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token =
     (authHeader && authHeader.split(" ")[1]) || req.cookies.accessToken;

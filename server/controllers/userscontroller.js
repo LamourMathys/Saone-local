@@ -1,11 +1,13 @@
 const pool = require("../db");
+const bcrypt = require("bcrypt");
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM users");
+    const { rows } = await pool.query(
+      "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login FROM users",
+    );
     res.json({ success: true, data: rows });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };
@@ -13,17 +15,20 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM users WHERE id = $1", [
-      id,
-    ]);
-    if (rows.length === 0) {
+    const [user] = (
+      await pool.query(
+        "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login FROM users WHERE id = $1",
+        [id],
+      )
+    ).rows;
+
+    if (!user) {
       return res
         .status(404)
         .json({ success: false, error: "Utilisateur non trouvé" });
     }
-    res.json({ success: true, data: rows[0] });
+    res.json({ success: true, data: user });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };
@@ -39,80 +44,110 @@ exports.createUser = async (req, res) => {
     provider_id,
     user_photo,
   } = req.body;
-
   try {
-    const { rows } = await pool.query(
-      "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [
-        first_name,
-        last_name,
-        email,
-        password,
-        role,
-        provider,
-        provider_id,
-        user_photo,
-      ],
-    );
-    res.status(201).json({ success: true, data: rows[0] });
+    const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
+
+    const [user] = (
+      await pool.query(
+        "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at",
+        [
+          first_name,
+          last_name,
+          email,
+          hashedPassword,
+          role,
+          provider,
+          provider_id,
+          user_photo,
+        ],
+      )
+    ).rows;
+    res.status(201).json({ success: true, data: user });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };
 
 exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const {
-    first_name,
-    last_name,
-    email,
-    password,
-    role,
-    provider,
-    provider_id,
-    user_photo,
-    last_login,
-  } = req.body;
+  const updates = { ...req.body };
+  const currentUser = req.user;
+  const isAdmin = currentUser?.role === "admin";
 
   try {
-    const { rows } = await pool.query(
-      "UPDATE users SET first_name = $1, last_name = $2, email = $3, password = $4, role = $5, provider = $6, provider_id = $7, user_photo = $8, last_login = $9 WHERE id = $10 RETURNING *",
-      [
-        first_name,
-        last_name,
-        email,
-        password,
-        role,
-        provider,
-        provider_id,
-        user_photo,
-        last_login,
-        id,
-      ],
-    );
-    res.json({ success: true, data: rows[0] });
+    if (updates.email) {
+      const emailResult = await pool.query(
+        "SELECT id FROM users WHERE email = $1 AND id <> $2",
+        [updates.email, id],
+      );
+
+      if (emailResult.rows.length > 0) {
+        return res
+          .status(409)
+          .json({ success: false, error: "Cet email est déjà utilisé" });
+      }
+    }
+
+    if (updates.password) {
+      updates.password = await bcrypt.hash(updates.password, 10);
+    }
+
+    if (!isAdmin) {
+      delete updates.role;
+      delete updates.provider;
+      delete updates.provider_id;
+    }
+
+    // Object.keys(updates) donne ['first_name', 'last_name']
+    // .map() convertit chaque clé en SQL : 'first_name = $1', 'last_name = $2' (le i commence à 0, donc on fait +1 pour PostgreSQL)
+    const fields = Object.keys(updates).map((key, i) => `${key} = $${i + 1}`);
+    const values = Object.values(updates);
+
+    if (fields.length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, error: "Aucune donnée à mettre à jour" });
+    }
+
+    values.push(id);
+    const query = `UPDATE users SET ${fields.join(", ")} WHERE id = $${values.length} RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login`;
+
+    const result = await pool.query(query, values);
+    const user = result.rows[0];
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Utilisateur non trouvé" });
+    }
+
+    res.status(200).json({ success: true, data: user });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };
 
 exports.deleteUser = async (req, res) => {
   const { id } = req.params;
+
   try {
-    const { rows } = await pool.query(
-      "DELETE FROM users WHERE id = $1 RETURNING *",
+    const result = await pool.query(
+      "DELETE FROM users WHERE id = $1 RETURNING id",
       [id],
     );
-    if (rows.length === 0) {
+    const user = result.rows[0];
+
+    if (!user) {
       return res
         .status(404)
         .json({ success: false, error: "Utilisateur non trouvé" });
     }
-    res.json({ success: true, data: rows[0] });
+
+    res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Une erreur est survenue" });
+    res.status(500).json({
+      success: false,
+      error: "Une erreur est survenue lors de la suppression.",
+    });
   }
 };

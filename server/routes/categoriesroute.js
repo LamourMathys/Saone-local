@@ -1,28 +1,23 @@
 const express = require("express");
 const router = express.Router();
-
-const authenticateToken = require("../verification/authverification");
-const { verifyAdmin } = require("../verification/adminverification");
 const categoriesController = require("../controllers/categoriescontroller");
+
+const { verifyAuth } = require("../verification/authverification");
+const { verifyAdmin } = require("../verification/adminverification");
 
 router.get("/", categoriesController.getAllCategories);
 router.get("/:id", categoriesController.getCategoryById);
 
-router.post(
-  "/",
-  authenticateToken,
-  verifyAdmin,
-  categoriesController.createCategory,
-);
+router.post("/", verifyAuth, verifyAdmin, categoriesController.createCategory);
 router.put(
   "/:id",
-  authenticateToken,
+  verifyAuth,
   verifyAdmin,
   categoriesController.updateCategory,
 );
 router.delete(
   "/:id",
-  authenticateToken,
+  verifyAuth,
   verifyAdmin,
   categoriesController.deleteCategory,
 );

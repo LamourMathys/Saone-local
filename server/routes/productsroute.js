@@ -1,28 +1,23 @@
 const express = require("express");
 const router = express.Router();
-
-const authenticateToken = require("../verification/authverification");
-const { verifyProducer } = require("../verification/producerverification");
 const productsController = require("../controllers/productscontroller");
+
+const { verifyAuth } = require("../verification/authverification");
+const { verifyProducer } = require("../verification/producerverification");
 
 router.get("/", productsController.getAllProducts);
 router.get("/:id", productsController.getProductById);
 
-router.post(
-  "/",
-  authenticateToken,
-  verifyProducer,
-  productsController.createProduct,
-);
+router.post("/", verifyAuth, verifyProducer, productsController.createProduct);
 router.put(
   "/:id",
-  authenticateToken,
+  verifyAuth,
   verifyProducer,
   productsController.updateProduct,
 );
 router.delete(
   "/:id",
-  authenticateToken,
+  verifyAuth,
   verifyProducer,
   productsController.deleteProduct,
 );

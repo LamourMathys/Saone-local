@@ -45,6 +45,12 @@ app.use("/api/orderitems", orderitemsRoutes);
 app.use("/api/favorites", favoritesRoutes);
 app.use("/api/eventparticipants", eventparticipantsRoutes);
 
+app.use(express.static(path.join(__dirname, "../client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/dist", "index.html"));
+});
+
 app.listen(PORT, () => {
   console.log(`Serveur lancé sur le port ${PORT}`);
 });

@@ -139,7 +139,6 @@ const seed = async () => {
     );
 
     const products = [
-      // Romane - Légumes / Œufs / Vin
       [
         romaneProducerId,
         4,
@@ -180,7 +179,6 @@ const seed = async () => {
         50,
         "https://exemple.com/photo.jpg",
       ],
-      // Julien - fruits / Pain
       [
         julienProducerId,
         5,
@@ -211,7 +209,6 @@ const seed = async () => {
         15,
         "https://exemple.com/photo.jpg",
       ],
-      // Camille - Fromages
       [
         camilleProducerId,
         6,
@@ -242,7 +239,6 @@ const seed = async () => {
         30,
         "https://exemple.com/photo.jpg",
       ],
-      // Nicolas - Miel
       [
         nicolasProducerId,
         7,

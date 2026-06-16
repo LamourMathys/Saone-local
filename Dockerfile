@@ -18,6 +18,7 @@ COPY server/ .
 
 COPY --from=builder /app/client/dist ./public
 
-EXPOSE 3000
+EXPOSE 3000 
 
 CMD ["node", "index.js"]
+ 

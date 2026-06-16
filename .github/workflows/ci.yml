@@ -1,5 +1,4 @@
 name: CI
-
 on: [push, pull_request]
 
 jobs:
@@ -7,13 +6,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Vérifier le README
         run: test -f readme.md
-
       - name: Vérifier les .txt
         run: find ./weeklys -name "*.txt" | grep .
-
       - name: Vérifier si il y a des fichiers dans le dossier "Livrables"
         run: find ./Livrables -type f | grep .
 
@@ -25,10 +21,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v3
-
       - name: Login ghcr.io
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Build & Push
         run: |
           docker build -t ghcr.io/lamourmathys/saone-local:latest .
@@ -39,6 +33,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Copier fichiers sur EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSHKEY }}
+          source: "docker-compose.yml,server/init.sql"
+          target: /home/${{ secrets.EC2_USERNAME }}/saone-local/
+
       - name: Déploiement via SSH
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -46,11 +51,14 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSHKEY }}
           script: |
+            mkdir -p /home/${{ secrets.EC2_USERNAME }}/saone-local/server
+
+            cat > /home/${{ secrets.EC2_USERNAME }}/saone-local/server/.env << 'EOF'
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+            PORT=${{ secrets.PORT }}
+            EOF
+
             echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker pull ghcr.io/lamourmathys/saone-local:latest
-            sudo docker stop saone-local || true
-            sudo docker rm saone-local || true
-            sudo docker run -d \
-              --name saone-local \
-              -p 3000:3000 \
-              ghcr.io/lamourmathys/saone-local:latest
+            sudo docker compose -f /home/${{ secrets.EC2_USERNAME }}/saone-local/docker-compose.yml up -d --pull always

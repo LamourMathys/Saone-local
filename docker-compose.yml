@@ -1,9 +1,24 @@
 services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: saone
+      POSTGRES_PASSWORD: saone
+      POSTGRES_DB: saone
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
   app:
-    build: .
+    image: ghcr.io/lamourmathys/saone-local:latest
     ports:
       - "3000:3000"
     env_file:
-      - server/.env
-    deploy-to-ec2:
-    needs: build-and-push
+      - ./server/.env
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:

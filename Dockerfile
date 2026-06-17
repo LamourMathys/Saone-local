@@ -10,7 +10,23 @@ COPY client/ .
 
 RUN npm run build
 
-FROM node:20-alpine
+
+FROM node:20-alpine AS frontend
+
+WORKDIR /app
+
+COPY --from=builder /app/client/.next/standalone ./
+
+COPY --from=builder /app/client/.next/static ./.next/static
+
+COPY --from=builder /app/client/public ./public
+
+EXPOSE 3001
+
+CMD ["node", "server.js"]
+
+
+FROM node:20-alpine AS backend
 
 WORKDIR /app
 
@@ -19,12 +35,6 @@ COPY server/package*.json ./
 RUN npm ci --omit=dev
 
 COPY server/ .
-
-COPY --from=builder /app/client/.next/standalone ./public
-
-COPY --from=builder /app/client/.next/static ./public/.next/static
-
-COPY --from=builder /app/client/public ./public/public
 
 EXPOSE 3000
 

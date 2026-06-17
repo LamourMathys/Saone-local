@@ -8,17 +8,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
 
-  app:
-    image: ghcr.io/lamourmathys/saone-local:latest
+  api:
+    image: ghcr.io/lamourmathys/saone-local:api
     ports:
       - "3000:3000"
     env_file:
       - ./server/.env
     depends_on:
       - db
+
+  app:
+    image: ghcr.io/lamourmathys/saone-local:app
+    ports:
+      - "3001:3001"
+    environment:
+      - API_URL=http://api:3000
+    depends_on:
+      - api
 
 volumes:
   postgres_data:

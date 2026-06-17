@@ -1,1 +1,95 @@
+Weekly n°9 16/06/2026 :
+
+Ce qui a été fait la semaine précédente :
+
+Marketing :
+
+page de demande à l admin depuis le profil client pour être aussi producteur 
+
+page ou le producteur marque ce qui est indisponible et peut décocher pour remettre les produits de saison par exemple
+
+Programmation :
+
+users stories 
+
+continué le back-end ( dans les dernières étapes)
+
+
+
+ensemble: 
+
+roadmap commencée côté programmation
+
+
+
+
+
+À modifier :
+
+Marketing :
+
+rien
+
+Programmation :
+
+rien
+
+
+
+Problèmes :
+
+Marketing :
+
+Rien
+
+Programmation :
+
+rien
+
+ensemble:
+
+rien
+
+
+
+Idées / choses / remarques bonus :
+
+Marketing :
+
+rien
+
+Programmation :
+
+rien
+
+
+
+objectifs globaux : 
+
+15 juin: front-end
+
+3 juillet : fin du projet (soutenance plus tard)
+
+8 jullet : soutenance
+
+
+
+Tâches de la semaine prochaine :
+
+Marketing :
+
+roadmap côté markets
+
+Programmation :
+
+finir le back-end d’ici maximum fin de semaine
+
+commencer le front end 
+
+Ensemble :
+
+continuer la roadmap
+
+continuer à préparer la soutenance
+
 

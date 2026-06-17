@@ -45,7 +45,7 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSHKEY }}
-          source: "docker-compose.yml,server/init.sql"
+          source: "docker-compose.yml,server/init.sql,nginx.conf"
           target: /home/${{ secrets.EC2_USERNAME }}/saone-local/
 
       - name: Déploiement via SSH

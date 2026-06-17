@@ -3,7 +3,6 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const path = require("path");
 const productRoutes = require("./routes/productsroute");
 const authsRoutes = require("./routes/authsroute");
 const producersRoutes = require("./routes/producersroute");
@@ -22,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:3001", "http://saone-local.webhop.me:3001"],
     credentials: true,
   }),
 );

@@ -24,6 +24,7 @@ services:
       - "3001:3001"
     environment:
       - API_URL=http://api:3000
+      - PORT=3001
     depends_on:
       - api
 

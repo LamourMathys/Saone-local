@@ -1,5 +1,5 @@
 A FINIR ET/OU VERIFIER :
-tout est à reverifier, juste le format à été modifier.
+tout est à reverifier, juste le format à ete modifier.
 {{{--------------------}}}
 
 avec les donnee rempli par le seeder :
@@ -11,7 +11,7 @@ desc:   Renvoie tout les produits de la db
         publique
         Soit getallproduct
 get.test: http://localhost:3000/api/products/
-Résultat: {
+Resultat: {
     "success": true,
     "data": [
         {
@@ -58,7 +58,7 @@ desc:   Renvoie le produit dont l'id est preciser dans la route
         publique
         Soit getproductbyid
 get.test: http://localhost:3000/api/products/1
-Résultat: {
+Resultat: {
     "success": true,
     "data": {
         "id": 1,
@@ -75,12 +75,12 @@ Résultat: {
 }
 --------------------------------------------
 route: POST  /products/
-desc:   Crée un nouveau produit dans la db et le renvoie
+desc:   Cree un nouveau produit dans la db et le renvoie
         producteurs ; ne marche pas sans login verif token jwt
         Soit createProduct
 post.test: http://localhost:3000/api/products/
     body:   T.B.A
-Résultat: {
+Resultat: {
     "success": true,
     "data": {
         "id": 4,
@@ -102,7 +102,7 @@ desc:   Met à jour un produit de la db et le renvoie
         Soit updateProduct
 put.test: http://localhost:3000/api/products/1
     body: T.B.A
-Résultat:
+Resultat:
 {
     "success": true,
     "data": {
@@ -124,9 +124,9 @@ desc:   Supprime un produit de la db
         producteurs ; ne marche pas sans login verif token jwt et ne fonctionne que sur produits appartenus
         Soit deleteProduct
 delete.test: http://localhost:3000/api/products/1
-Résultat:{
+Resultat:{
         "success": false,
-        "error": "Produit non trouvé"
+        "error": "Produit non trouve"
         }
 ----------------------------------------------
 ---------------ROUTE CATEGORIES---------------
@@ -140,14 +140,14 @@ desc:   Renvoie tout les producteurs de la db
         publique
         Soit getAllProducers
 get.test: http://localhost:3000/api/producers/
-Résultat: {
+Resultat: {
     "success": true,
     "data": [
         {
         "id": 1,
         "user_id": 3,
-        "shop_location": "12 rue du Marché, Chalon-sur-Saône",
-        "business_name": "Marée Océane",
+        "shop_location": "12 rue du Marche, Chalon-sur-Saône",
+        "business_name": "Maree Oceane",
         "siret": null
         }
     ]
@@ -158,26 +158,26 @@ desc:   Renvoie le producteur dont l'id est precise dans la route
         publique
         Soit getProducerById
 get.test: http://localhost:3000/api/producers/1
-Résultat: {
+Resultat: {
     "success": true,
     "data": [
         {
         "id": 1,
         "user_id": 3,
-        "shop_location": "12 rue du Marché, Chalon-sur-Saône",
-        "business_name": "Marée Océane",
+        "shop_location": "12 rue du Marche, Chalon-sur-Saône",
+        "business_name": "Maree Oceane",
         "siret": null
         }
     ]
 }
 --------------------------------------------
 route: POST  /producers/
-desc:   Crée un nouveau producteur dans la db et le renvoie
+desc:   Cree un nouveau producteur dans la db et le renvoie
         admin ; ne marche pas sans login verif token jwt
         Soit createProducer
 post.test: http://localhost:3000/api/producers/
     body: T.B.A
-Résultat: {
+Resultat: {
     "success": true,
     "data": {
         "id": 4,
@@ -196,7 +196,7 @@ desc:   Met à jour un producteur de la db et le renvoie
         Soit updateProducer
 put.test: http://localhost:3000/api/producers/2
     body: T.B.A
-Résultat: {
+Resultat: {
     "id": 2,
     "user_id": 2,
     "description": "test",
@@ -211,7 +211,7 @@ desc:   Supprime un producteur de la db
         publique ; ne marche pas sans login verif token jwt et le producteur ne peut que se supprimer lui même
         Soit deleteProducer
 delete.test: http://localhost:3000/api/producers/2
-Résultat: {
+Resultat: {
     T.B.A
 }
 ----------------------------------------
@@ -222,7 +222,7 @@ desc:   Renvoie tout les utilisateurs de la db
         admin ; ne marche pas sans login verif token jwt
         Soit getAllUsers
 get.test: http://localhost:3000/api/users/
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -231,17 +231,17 @@ desc:   Renvoie l'utilisateur dont l'id est precise dans la route
         admin ; ne marche pas sans login verif token jwt
         Soit getUserById
 get.test: http://localhost:3000/api/users/1
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
 route: POST  /users/
-desc:   Crée un nouveau utilisateur dans la db et le renvoie
+desc:   Cree un nouveau utilisateur dans la db et le renvoie
         admin ; ne marche pas sans login verif token jwt
         Soit createUser
 post.test: http://localhost:3000/api/users/
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -251,7 +251,7 @@ desc:   Met à jour un utilisateur de la db et le renvoie
         Soit updateUser
 put.test: http://localhost:3000/api/users/2
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -260,7 +260,7 @@ desc:   Supprime un utilisateur de la db
         admin ; ne marche pas sans login verif token jwt
         Soit deleteUser
 delete.test: http://localhost:3000/api/users/2
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------------
@@ -275,7 +275,7 @@ desc:   Renvoie tout les favoris de la db
         admin ; ne marche pas sans login verif token jwt
         Soit getAllFavorites
 get.test: http://localhost:3000/api/favorites/
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -284,17 +284,17 @@ desc:   Renvoie le favoris dont l'id est precise dans la route
         admin ; ne marche pas sans login verif token jwt
         Soit getFavoriteById
 get.test: http://localhost:3000/api/favorites/1
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
 route: POST  /favorites/
-desc:   Crée un nouveau favoris dans la db et le renvoie
+desc:   Cree un nouveau favoris dans la db et le renvoie
         publique ; ne marche pas sans login verif token jwt
         Soit createFavorite
 post.test: http://localhost:3000/api/favorites/
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -304,7 +304,7 @@ desc:   Met à jour un favoris de la db et le renvoie
         Soit updateFavorite
 put.test: http://localhost:3000/api/favorites/2
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -313,7 +313,7 @@ desc:   Supprime un favoris de la db
         publique ; ne marche pas sans login verif token jwt et l'utilisateur ne peut que supprimer ses propres favoris
         Soit deleteFavorite
 delete.test: http://localhost:3000/api/favorites/2
-Résultat: {
+Resultat: {
     T.B.A
 }
 ------------------------------------------
@@ -324,7 +324,7 @@ desc:   Renvoie toute les commandes de la db
         admin ; ne marche pas sans login verif token jwt
         Soit getAllOrders
 get.test: http://localhost:3000/api/orders/
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -333,17 +333,17 @@ desc:   Renvoie la commande dont l'id est precise dans la route
         publique ; ne marche pas sans login verif token jwt et l'utilisateur ne peut que voir ses propres commandes ou les commandes qu'il gere s'il est un producteur
         Soit getOrderById
 get.test: http://localhost:3000/api/orders/1
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
 route: POST  /orders/
-desc:   Crée une nouvelle commande dans la db et le renvoie
+desc:   Cree une nouvelle commande dans la db et le renvoie
         publique ; ne marche pas sans login verif token jwt
         Soit createOrder
 post.test: http://localhost:3000/api/orders/
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -353,7 +353,7 @@ desc:   Met à jour une commande de la db et le renvoie
         Soit updateOrder
 put.test: http://localhost:3000/api/orders/2
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -362,7 +362,7 @@ desc:   Supprime une commande de la db et le renvoie
         publique ; ne marche pas sans login verif token jwt et l'utilisateur ne peut que supprimer ses propres commandes et que si la commande n'est pas finaliser
         Soit deleteOrder
 delete.test: http://localhost:3000/api/orders/2
-Résultat: {
+Resultat: {
     T.B.A
 }
 -----------------------------------------------
@@ -373,7 +373,7 @@ desc:   Renvoie tout les items de toute les commandes de la db
         admin ; ne marche pas sans login verif token jwt
         Soit getAllOrderItems
 get.test: http://localhost:3000/api/orderitems/
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -382,17 +382,17 @@ desc:   Renvoie l'item dont l'id est precise dans la route
         publique ; ne marche pas sans login verif token jwt et l'utilisateur ne peut que voir les items de ses propres commandes ou les items des commandes qu'il gere s'il est un producteur
         Soit getOrderItemById
 get.test: http://localhost:3000/api/orderitems/1
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
 route: POST  /orderitems/
-desc:   Crée une nouvelle commande dans la db et le renvoie
+desc:   Cree une nouvelle commande dans la db et le renvoie
         publique ; ne marche pas sans login verif token jwt
         Soit createOrderItem
 post.test: http://localhost:3000/api/orderitems/
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -402,7 +402,7 @@ desc:   Met à jour l'item d'une commande de la db et le renvoie
         Soit updateOrderItem
 put.test: http://localhost:3000/api/orderitems/2
     body: T.B.A
-Résultat: {
+Resultat: {
     T.B.A
 }
 --------------------------------------------
@@ -411,13 +411,104 @@ desc:   Supprime un item d'une commande de la db
         publique ; ne marche pas sans login verif token jwt et l'utilisateur ne peut que supprimer les items de ses propres commandes et que si la commande n'est pas finaliser
         Soit deleteOrderItem
 delete.test: http://localhost:3000/api/orderitems/2
-Résultat: {
+Resultat: {
     T.B.A
 }
 ------------------------------------------
 ---------------ROUTE EVENTS---------------
 ------------------------------------------
-
+route: GET  /events/
+desc:   Renvoie tout les evenements de la db
+        publique 
+        Soit getAllEvents
+get.test: http://localhost:3000/api/events/
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: GET  /events/:id
+desc:   Renvoie l'evenement dont l'id est precise dans la route
+        publique 
+        Soit getEventById
+get.test: http://localhost:3000/api/events/1
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: POST  /events/
+desc:   Cree un nouveau evenement dans la db et le renvoie
+        T.B.A 
+        createEvent
+post.test: http://localhost:3000/api/events/
+    body: T.B.A
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: PUT /events/:id
+desc:   Met à jour un evenement de la db et le renvoie
+        organisateur ; ne marche pas sans login verif token jwt et un organisateur ne peut que modifier son/ses propre evenement(s)
+        soit UpdateEvent
+put.test: http://localhost:3000/api/events/2
+    body: T.B.A
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: DELETE /events/:id
+desc:   Supprime un evenement de la db
+        admin ; ne marche pas sans login verif token jwt
+        Soit deleteEvent
+delete.test: http://localhost:3000/api/events/2
+Resultat: {
+    T.B.A
+}
 ------------------------------------------------------
 ---------------ROUTE EVENT PARTICIPANTS---------------
 ------------------------------------------------------
+route: GET  /eventparticipants/
+desc:   Renvoie tout les participants de tout les evenements de la db
+        admin ; ne marche pas sans login verif token jwt
+        Soit getAllEventParticipants
+get.test: http://localhost:3000/api/eventparticipants/
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: GET  /eventparticipants/:id
+desc:   Renvoie le participant d'evenement dont l'id est precise dans la route
+        publique 
+        Soit getEventParticipantById
+get.test: http://localhost:3000/api/eventparticipants/1
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: POST  /eventparticipants/
+desc:   Cree un nouveau participant d'evenement dans la db et le renvoie
+        T.B.A 
+        createEventParticipant
+post.test: http://localhost:3000/api/eventparticipants/
+    body: T.B.A
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: PUT /eventparticipants/:id
+desc:   Met à jour un participant d'evenement de la db et le renvoie
+        organisateur ; ne marche pas sans login verif token jwt 
+        soit UpdateEventParticipant
+put.test: http://localhost:3000/api/eventparticipants/2
+    body: T.B.A
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: DELETE /eventparticipants/:id
+desc:   Supprime un participant d'evenement de la db
+        organisateur ; ne marche pas sans login verif token jwt
+        Soit deleteEventParticipant
+delete.test: http://localhost:3000/api/eventparticipants/2
+Resultat: {
+    T.B.A
+}

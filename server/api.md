@@ -1,9 +1,16 @@
-Donnee rempli par le seeder
+A FINIR ET/OU VERIFIER :
+tout est à reverifier, juste le format à été modifier.
+{{{--------------------}}}
 
-ROUTE PRODUCTS
-
+avec les donnee rempli par le seeder :
+--------------------------------------------
+---------------ROUTE PRODUCTS---------------
+--------------------------------------------
+route: GET  /products/
+desc:   Renvoie tout les produits de la db
+        publique
+        Soit getallproduct
 get.test: http://localhost:3000/api/products/
-Soit getallproduct
 Résultat: {
     "success": true,
     "data": [
@@ -45,9 +52,12 @@ Résultat: {
         }
     ]
 }
-
+--------------------------------------------
+route: GET  /products/:id
+desc:   Renvoie le produit dont l'id est preciser dans la route
+        publique
+        Soit getproductbyid
 get.test: http://localhost:3000/api/products/1
-Soit getproductbyid
 Résultat: {
     "success": true,
     "data": {
@@ -63,11 +73,14 @@ Résultat: {
         "created_at": "2026-06-10T06:26:39.396Z"
     }
 }
-
+--------------------------------------------
+route: POST  /products/
+desc:   Crée un nouveau produit dans la db et le renvoie
+        producteurs ; ne marche pas sans login verif token jwt
+        Soit createProduct
 post.test: http://localhost:3000/api/products/
-Soit createProduct, ne marche pas si pas login verif token jwt et ne marche pas si le user n’est pas admin ou producteur en plus
-Résultat: le produit est créé et ajouté dans la db et laid est automatiquement auto-incrementé
-{
+    body:   T.B.A
+Résultat: {
     "success": true,
     "data": {
         "id": 4,
@@ -82,9 +95,13 @@ Résultat: le produit est créé et ajouté dans la db et laid est automatiqueme
         "created_at": "2026-06-10T06:48:35.208Z"
     }
 }
-
+--------------------------------------------
+route: PUT  /products/:id
+desc:   Met à jour un produit de la db et le renvoie
+        producteurs ; ne marche pas sans login verif token jwt et ne fonctionne que sur produits appartenus
+        Soit updateProduct
 put.test: http://localhost:3000/api/products/1
-Soit UpdateProduct, ne marche pas si pas login verif token jwt et ne marche pas si le user n’est pas admin ou producteur en plus
+    body: T.B.A
 Résultat:
 {
     "success": true,
@@ -101,18 +118,29 @@ Résultat:
         "created_at": "2026-06-10T06:48:35.208Z"
     }
 }
-
-Delete.test: http://localhost:3000/api/products/1
-Soit UpdateProduct, ne marche pas si pas login verif token jwt et ne marche pas si le user n’est pas admin ou producteur en plus
+--------------------------------------------
+route: DELETE  /products/:id
+desc:   Supprime un produit de la db
+        producteurs ; ne marche pas sans login verif token jwt et ne fonctionne que sur produits appartenus
+        Soit deleteProduct
+delete.test: http://localhost:3000/api/products/1
 Résultat:{
-"success": false,
-"error": "Produit non trouvé"
-}
+        "success": false,
+        "error": "Produit non trouvé"
+        }
 
-ROUTE PRODUCERS
+----------------------------------------------
+---------------ROUTE CATEGORIES---------------
+----------------------------------------------
 
+---------------------------------------------
+---------------ROUTE PRODUCERS---------------
+---------------------------------------------
+route: GET  /producers/
+desc:   Renvoie tout les producteurs de la db
+        publique
+        Soit getAllProducers
 get.test: http://localhost:3000/api/producers/
-Soit getallproducers
 Résultat: {
     "success": true,
     "data": [
@@ -125,9 +153,12 @@ Résultat: {
         }
     ]
 }
-
+--------------------------------------------
+route: GET  /producers/:id
+desc:   Renvoie tout le producteur dont l'id est preciser dans la route
+        publique
+        Soit getProducerById
 get.test: http://localhost:3000/api/producers/1
-Soit getproducersbyid
 Résultat: {
     "success": true,
     "data": [
@@ -140,9 +171,13 @@ Résultat: {
         }
     ]
 }
-
+--------------------------------------------
+route: POST  /producers/
+desc:   Crée un nouveau producteur dans la db et le renvoie
+        admin ; ne marche pas sans login verif token jwt
+        Soit createProducer
 post.test: http://localhost:3000/api/producers/
-Soit createproducers
+    body: T.B.A
 Résultat: {
     "success": true,
     "data": {
@@ -155,9 +190,13 @@ Résultat: {
         "siret": null
     }
 }
-
+--------------------------------------------
+route: PUT /producers/:id
+desc:   Met à jour un producteur de la db et le renvoie
+        publique ; ne marche pas sans login verif token jwt et le producteur ne peut que se modifier lui meme
+        Soit updateProducer
 put.test: http://localhost:3000/api/producers/2
-Soit updateproducers
+    body: T.B.A
 Résultat: {
     "id": 2,
     "user_id": 2,
@@ -167,10 +206,40 @@ Résultat: {
     "producer_photo": "https://exemple.com/photo.jpg",
     "siret": 67
 }
-
+--------------------------------------------
+route: DELETE /producers/:id
+desc:   Met à jour un producteur de la db et le renvoie
+        publique ; ne marche pas sans login verif token jwt et le producteur ne peut que se supprimer lui même
+        Soit deleteProducer
 delete.test: http://localhost:3000/api/producers/2
-Soit deleteproducers
 Résultat: {
     "success": false,
     "error": "Producteur non trouvé"
 }
+----------------------------------------
+---------------ROUTE USER---------------
+----------------------------------------
+
+--------------------------------------------------
+---------------ROUTE AUTHENTICATION---------------
+--------------------------------------------------
+
+---------------------------------------------
+---------------ROUTE FAVORITES---------------
+---------------------------------------------
+
+------------------------------------------
+---------------ROUTE ORDERS---------------
+------------------------------------------
+
+-----------------------------------------------
+---------------ROUTE ORDER ITEMS---------------
+-----------------------------------------------
+
+------------------------------------------
+---------------ROUTE EVENTS---------------
+------------------------------------------
+
+------------------------------------------------------
+---------------ROUTE EVENT PARTICIPANTS---------------
+------------------------------------------------------

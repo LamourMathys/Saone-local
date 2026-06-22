@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const eventscontroller = require("../controllers/eventscontroller");
-
 const { verifyAuth } = require("../verification/authverification");
 const { verifyProducer } = require("../verification/producerverification");
 

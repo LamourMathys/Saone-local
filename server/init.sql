@@ -62,7 +62,7 @@ CREATE TABLE orders (
 
 CREATE TABLE order_items (
   id         SERIAL PRIMARY KEY,
-  order_id   INTEGER REFERENCES orders(id),
+  order_id   INTEGER REFERENCES orders(id) ON DELETE CASCADE,
   product_id INTEGER REFERENCES products(id),
   quantity   INTEGER
 );
@@ -84,9 +84,10 @@ CREATE TABLE events (
 );
 
 CREATE TABLE event_participants (
-  id          SERIAL PRIMARY KEY,
-  event_id    INTEGER REFERENCES events(id),
-  role        VARCHAR
+  id       SERIAL PRIMARY KEY,
+  event_id INTEGER REFERENCES events(id),
+  user_id  INTEGER REFERENCES users(id),
+  role     VARCHAR
 );
 
 CREATE TABLE refresh_tokens (

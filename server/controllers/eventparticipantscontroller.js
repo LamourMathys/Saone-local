@@ -1,6 +1,6 @@
 const pool = require("../db");
 
-exports.getAllEventParticipants = async (req, res) => { 
+exports.getAllEventParticipants = async (req, res) => {
   try {
     const { rows } = await pool.query("SELECT * FROM event_participants");
     res.json({ success: true, data: rows });
@@ -13,9 +13,10 @@ exports.getAllEventParticipants = async (req, res) => {
 exports.getEventParticipantById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM event_participants WHERE id = $1", [
-      id,
-    ]);
+    const { rows } = await pool.query(
+      "SELECT * FROM event_participants WHERE id = $1",
+      [id],
+    );
     if (rows.length === 0) {
       return res
         .status(404)
@@ -28,9 +29,22 @@ exports.getEventParticipantById = async (req, res) => {
   }
 };
 
-exports.createEventParticipant= async (req, res) => { 
-  const { user_id, event_id, role } =
-    req.body;
+exports.getAllEventParticipantsByEventId = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM event_participants WHERE event_id = $1",
+      [eventId],
+    );
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Une erreur est survenue" });
+  }
+};
+
+exports.createEventParticipant = async (req, res) => {
+  const { user_id, event_id, role } = req.body;
 
   try {
     const { rows } = await pool.query(
@@ -44,10 +58,10 @@ exports.createEventParticipant= async (req, res) => {
   }
 };
 
-exports.updateEventParticipant = async (req, res) => { // Shouldn't be used outside of debugging
+exports.updateEventParticipant = async (req, res) => {
+  // Shouldn't be used outside of debugging
   const { id } = req.params;
-  const { user_id, event_id, role } =
-    req.body;
+  const { user_id, event_id, role } = req.body;
 
   try {
     const { rows } = await pool.query(

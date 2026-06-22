@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 const favoritescontroller = require("../controllers/favoritescontroller");
 
+const { verifyAuth } = require("../verification/authverification");
 const { verifyAdmin } = require("../verification/adminverification");
 
-router.get("/", favoritescontroller.getAllFavorites);
-router.get("/:id", favoritescontroller.getFavoriteById);
-router.post("/", favoritescontroller.createFavorite);
-router.put("/:id", verifyAdmin, favoritescontroller.updateFavorite);
-router.delete("/:id", favoritescontroller.deleteFavorite);
+router.get("/", verifyAuth, verifyAdmin, favoritescontroller.getAllFavorites);
+router.get("/:id", verifyAuth, favoritescontroller.getFavoriteById);
+router.post("/", verifyAuth, favoritescontroller.createFavorite);
+router.put("/:id", verifyAuth, favoritescontroller.updateFavorite);
+router.delete("/:id", verifyAuth, favoritescontroller.deleteFavorite);
 
 module.exports = router;

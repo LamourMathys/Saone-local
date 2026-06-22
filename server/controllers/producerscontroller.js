@@ -137,7 +137,7 @@ exports.deleteProducer = async (req, res) => {
       return res.status(403).json({ success: false, error: "Accès refusé." });
     }
 
-    await pool.query("UPDATE users SET role = 'user' WHERE id = $1", [
+    await pool.query("UPDATE users SET role = 'client' WHERE id = $1", [
       producerOwnerId,
     ]);
     await pool.query("DELETE FROM producers WHERE id = $1", [id]);

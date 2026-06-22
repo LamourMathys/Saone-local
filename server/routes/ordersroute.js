@@ -1,11 +1,45 @@
 const express = require("express");
 const router = express.Router();
-const orderscontroller = require("../controllers/orderscontroller");
+const ordersController = require("../controllers/orderscontroller");
+const { verifyAuth } = require("../verification/authverification");
+const {
+  verifyOrderOwnerOrAdmin,
+} = require("../verification/orderowneroradminverification");
+const { verifyAdmin } = require("../verification/adminverification");
+const { verifyProducer } = require("../verification/producerverification");
 
-router.get("/", orderscontroller.getAllOrders);
-router.get("/:id", orderscontroller.getOrderrById);
-router.post("/", orderscontroller.createOrder);
-router.put("/:id", orderscontroller.updateOrder);
-router.delete("/:id", orderscontroller.deleteOrder);
+router.get("/", verifyAuth, verifyAdmin, ordersController.getAllOrders);
+router.get(
+  "/completed",
+  verifyAuth,
+  verifyAdmin,
+  ordersController.getAllOrdersCompleted,
+);
+router.get("/user", verifyAuth, ordersController.getAllOrdersByUser);
+router.get(
+  "/producer",
+  verifyAuth,
+  verifyProducer,
+  ordersController.getAllOrdersByProducer,
+);
+router.get(
+  "/:id",
+  verifyAuth,
+  verifyOrderOwnerOrAdmin,
+  ordersController.getOrderById,
+);
+router.post("/", verifyAuth, ordersController.createOrder);
+router.put(
+  "/:id",
+  verifyAuth,
+  verifyOrderOwnerOrAdmin,
+  ordersController.updateOrder,
+);
+router.delete(
+  "/:id",
+  verifyAuth,
+  verifyOrderOwnerOrAdmin,
+  ordersController.deleteOrder,
+);
 
 module.exports = router;

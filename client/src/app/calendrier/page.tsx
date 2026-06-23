@@ -1,3 +1,3 @@
 export default function Calendrier() {
-  return <main className="w-full px-50"></main>;
+  return <main className="w-full">calendrier</main>;
 }

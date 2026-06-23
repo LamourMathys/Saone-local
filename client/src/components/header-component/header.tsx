@@ -1,10 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Header() {
+export default function Header({ setActiveTab = (value: string) => {} }) {
   return (
     <header className="h-20 flex items-center justify-between px-4 bg-[#fff5ea]">
-      <Link href="/" className="flex items-center gap-2">
+      <Link
+        href="/"
+        className="flex items-center gap-2"
+        onClick={() => setActiveTab("")}
+      >
         <Image
           src="/SaoneLocal.png"
           alt="Saône Local Logo"

@@ -1,4 +1,7 @@
+"use client";
+
 import { Geist, Geist_Mono } from "next/font/google";
+import { useState } from "react";
 import "./globals.css";
 import Header from "../components/header-component/header";
 import NavBar from "../components/navbar-component/navbar";
@@ -14,22 +17,19 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Saone-local",
-  description: "Marketplace en Saone-et-Loire",
-};
-
 export default function RootLayout({ children }) {
+  const [activeTab, setActiveTab] = useState("");
+
   return (
     <html lang="fr">
       <body className="bg-[#fdfaf5] text-stone-800 min-h-screen flex flex-col m-0 p-0">
-        <Header />
+        <Header setActiveTab={setActiveTab} />
 
         <main className="w-full min-h-[92vh]">{children}</main>
 
         <Footer />
 
-        <NavBar />
+        <NavBar activeTab={activeTab} setActiveTab={setActiveTab} />
       </body>
     </html>
   );

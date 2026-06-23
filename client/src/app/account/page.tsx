@@ -1,3 +1,3 @@
 export default function Account() {
-  return <main className="w-full px-50"></main>;
+  return <main className="w-full">profil</main>;
 }

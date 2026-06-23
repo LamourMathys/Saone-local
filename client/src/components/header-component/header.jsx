@@ -4,7 +4,7 @@ import styles from "./header.module.css";
 
 export default function Header() {
   return (
-    <header className="h-20 border-b border-[#8f8983] flex items-center justify-between px-4 bg-[#fff5ea]">
+    <header className="h-20 flex items-center justify-between px-4 bg-[#fff5ea]">
       <Link href="/" className="flex items-center gap-2">
         <Image
           src="/SaoneLocal.png"

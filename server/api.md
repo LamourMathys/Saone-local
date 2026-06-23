@@ -131,7 +131,53 @@ Resultat:{
 ----------------------------------------------
 ---------------ROUTE CATEGORIES---------------
 ----------------------------------------------
-
+route: GET  /categories/
+desc:   Renvoie toute les categories de la db
+        publique
+        Soit getAllCategories
+get.test: http://localhost:3000/api/categories/
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: GET  /categories/:id
+desc:   Renvoie la categorie dont l'id est preciser dans la route
+        publique
+        Soit getCategoryById
+get.test: http://localhost:3000/api/categories/1
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: POST  /categories/
+desc:   Cree une nouvelle categorie dans la db et le renvoie
+        ??? ; ne marche pas sans login verif token jwt
+        Soit createCategory
+post.test: http://localhost:3000/api/categories/
+    body:   T.B.A
+Resultat: {
+    T.B.A
+}
+--------------------------------------------
+route: PUT  /categories/:id
+desc:   Met à jour une categorie de la db et le renvoie
+        ??? ; ne marche pas sans login verif token jwt
+        Soit updateCategory
+put.test: http://localhost:3000/api/categories/1
+    body: T.B.A
+Resultat:
+{
+    T.B.A
+}
+--------------------------------------------
+route: DELETE  /categories/:id
+desc:   Supprime une categorie de la db
+        ??? ; ne marche pas sans login verif token jwt
+        Soit deleteCategory
+delete.test: http://localhost:3000/api/categories/1
+Resultat:{
+        T.B.A
+        }
 ---------------------------------------------
 ---------------ROUTE PRODUCERS---------------
 ---------------------------------------------

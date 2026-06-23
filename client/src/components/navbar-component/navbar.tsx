@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function NavBar() {
   const [activeTab, setActiveTab] = useState("null");
@@ -10,15 +11,16 @@ export default function NavBar() {
     <nav className="fixed bottom-4 left-3 right-3 h-16 rounded-2xl flex items-center z-50 overflow-hidden">
       <div className="absolute inset-0 bg-[#FACA92]/75 backdrop-opacity-40 -z-10" />
 
-      <button
+      <Link
+        href="/calendrier"
+        className=" hover:underline flex-1 h-full flex items-center justify-center active:scale-95 transition-transform"
         onClick={() => setActiveTab("calendar")}
-        className="flex-1 h-full flex items-center justify-center active:scale-95 transition-transform"
       >
         <div className="relative w-12 h-12">
           <Image
             src={
               activeTab === "calendar"
-                ? "/picto-calendrie.svg"
+                ? "/picto-calendrier-vert.svg"
                 : "/picto-calendrier.svg"
             }
             alt="Calendrier"
@@ -26,7 +28,7 @@ export default function NavBar() {
             className="object-contain"
           />
         </div>
-      </button>
+      </Link>
 
       <button
         onClick={() => setActiveTab("cart")}
@@ -35,7 +37,9 @@ export default function NavBar() {
         <div className="relative w-12 h-12">
           <Image
             src={
-              activeTab === "cart" ? "/picto-panie.svg" : "/picto-panier.svg"
+              activeTab === "cart"
+                ? "/picto-panier-vert.svg"
+                : "/picto-panier.svg"
             }
             alt="Panier"
             fill
@@ -51,7 +55,9 @@ export default function NavBar() {
         <div className="relative w-12 h-12">
           <Image
             src={
-              activeTab === "search" ? "/picto-loup.svg" : "/picto-loupe.svg"
+              activeTab === "search"
+                ? "/picto-loupe-vert.svg"
+                : "/picto-loupe.svg"
             }
             alt="loupe"
             fill
@@ -68,7 +74,7 @@ export default function NavBar() {
           <Image
             src={
               activeTab === "favorites"
-                ? "/picto-etoil.svg"
+                ? "/picto-etoile-vert.svg"
                 : "/picto-etoile.svg"
             }
             alt="Favoris"
@@ -85,7 +91,9 @@ export default function NavBar() {
         <div className="relative w-12 h-12">
           <Image
             src={
-              activeTab === "profile" ? "/picto-profi.svg" : "/picto-profil.svg"
+              activeTab === "profile"
+                ? "/picto-profil-vert.svg"
+                : "/picto-profil.svg"
             }
             alt="Profil"
             fill

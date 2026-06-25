@@ -2,11 +2,23 @@ const pool = require("../db");
 
 exports.getAllProducers = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM producers");
+    const { rows } = await pool.query(`
+      SELECT 
+        producers.*, 
+        users.user_photo, 
+        users.first_name AS first_name,
+        users.last_name AS last_name
+      FROM producers
+      INNER JOIN users ON producers.user_id = users.id
+    `);
+
     res.json({ success: true, data: rows });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: "Une erreur est survenue" });
+    console.error("Erreur dans getAllProducers:", error);
+    res.status(500).json({
+      success: false,
+      error: "Une erreur est survenue lors de la récupération des producteurs",
+    });
   }
 };
 

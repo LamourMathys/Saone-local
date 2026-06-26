@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import HomeProductCard from "../components/HomeProductCard-component/HomeProductCard";
 import HomeProducerCard from "../components/HomeProducerCard-component/HomeProducerCard";
+import Banniere from "../components/banniere/HomeProducerCard";
 
 const scrollToBottom = () => {
   window.scrollTo({
@@ -41,28 +42,7 @@ export default function Home() {
   return (
     <main className="w-full bg-[#FAF6F0] min-h-screen">
       {/* ================= ZONE BANNIÈRE ================= */}
-      <div className="relative w-full aspect-3/1">
-        <Image
-          src="/banniere-SaoneLocal.svg"
-          alt="Banniere Saone-Local"
-          fill
-          priority
-          className="object-cover"
-        />
-        <button
-          className="absolute bottom-0.75 right-20 md:right-10 lg:right-20 w-6 h-6 md:w-8 md:h-8"
-          onClick={scrollToBottom}
-        >
-          <Image
-            src="/picto-fleche-verte.png"
-            alt="Fleche Verte"
-            fill
-            priority
-            className="object-contain"
-          />
-        </button>
-      </div>
-
+      <Banniere />
       {/* ================= ZONE TITRE : VEDETTES ================= */}
       <div
         style={{
@@ -107,6 +87,7 @@ export default function Home() {
           {produits.slice(0, 6).map((produit: any) => (
             <HomeProductCard
               key={produit.id}
+              id={produit.id}
               name={produit.product_name}
               photoUrl={produit.product_photo}
             />
@@ -192,6 +173,7 @@ export default function Home() {
           {producteurs.slice(0, 3).map((producers: any) => (
             <HomeProducerCard
               key={producers.id}
+              id={producers.id}
               name={producers.business_name}
               firstname={producers.first_name}
               lastname={producers.last_name}

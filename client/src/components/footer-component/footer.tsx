@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#fff5ea] pb-20 px-10 text-stone-700">
+    <footer className="w-full pt-10 pb-20 px-10">
       <div className="grid grid-cols-2 gap-y-5 gap-x-10 text-[15px] font-medium">
         <div className="space-y-4">
           <Link href="/connexion" className="block hover:underline">
@@ -45,9 +45,7 @@ export default function Footer() {
             className="object-contain"
           />
         </div>
-        <span className="text-sm font-medium text-stone-500">
-          Fabriqué en Bourgogne
-        </span>
+        <span className="text-sm font-medium">Fabriqué en Bourgogne</span>
       </div>
     </footer>
   );

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Baloo_2 } from "next/font/google";
+import Link from "next/link";
 
 const baloo = Baloo_2({
   subsets: ["latin"],
@@ -9,13 +10,21 @@ const baloo = Baloo_2({
 });
 
 interface ProductCardProps {
+  id: number;
   name: string;
   photoUrl: string;
 }
 
-export default function HomeProductCard({ name, photoUrl }: ProductCardProps) {
+export default function HomeProductCard({
+  name,
+  photoUrl,
+  id,
+}: ProductCardProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <Link
+      href={`/produits/${id}`}
+      style={{ display: "flex", flexDirection: "column" }}
+    >
       <div
         style={{
           width: "100%",
@@ -57,6 +66,6 @@ export default function HomeProductCard({ name, photoUrl }: ProductCardProps) {
           {name}
         </p>
       </div>
-    </div>
+    </Link>
   );
 }

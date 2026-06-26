@@ -1,19 +1,10 @@
-import Image from "next/image";
+import Banniere from "../../components/banniere/HomeProducerCard";
 
 export default function Mentions() {
   return (
     <main className="w-full">
       {/* bloc "mention legal" en haut à droite à ajouter */}
-      {/* faire devenir un components pour le reutiliser plus efficacement  */}
-      <div className="relative w-full aspect-3/1">
-        <Image
-          src="/banniere-SaoneLocal.svg"
-          alt="Label Fabriqué en Bourgogne"
-          fill
-          priority
-          className="object-contain"
-        />
-      </div>
+      <Banniere />
       <div>VOICI DES MAGNIFIQUES MENTIONS LEGALES</div>
     </main>
   );

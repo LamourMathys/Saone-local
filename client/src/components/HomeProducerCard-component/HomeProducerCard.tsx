@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Open_Sans } from "next/font/google";
+import Link from "next/link";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -9,6 +10,7 @@ const openSans = Open_Sans({
 });
 
 interface ProducersCardProps {
+  id: number;
   name: string;
   firstname: string;
   lastname: string;
@@ -16,13 +18,17 @@ interface ProducersCardProps {
 }
 
 export default function HomeProducerCard({
+  id,
   name,
   firstname,
   lastname,
   photoUrl,
 }: ProducersCardProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+    <Link
+      href={`/producteur/${id}`}
+      style={{ display: "flex", flexDirection: "column", gap: "4px" }}
+    >
       <div
         style={{
           width: "100%",
@@ -43,28 +49,16 @@ export default function HomeProducerCard({
       </div>
 
       <h2
-        className={openSans.className}
-        style={{
-          margin: 0,
-          fontSize: "8px",
-          fontWeight: "400",
-          color: "#714143",
-        }}
+        className={`${openSans.className} m-0 text-[8px] font-normal text-[#714143] text-center`}
       >
         {firstname} {lastname}
       </h2>
 
       <p
-        className={openSans.className}
-        style={{
-          margin: 0,
-          fontWeight: "400",
-          fontSize: "8px",
-          color: "#714143",
-        }}
+        className={`${openSans.className} m-0 font-normal text-[8px] text-[#714143] text-center`}
       >
         {name}
       </p>
-    </div>
+    </Link>
   );
 }

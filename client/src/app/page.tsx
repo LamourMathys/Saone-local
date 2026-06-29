@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import HomeProductCard from "../components/HomeProductCard-component/HomeProductCard";
 import HomeProducerCard from "../components/HomeProducerCard-component/HomeProducerCard";
 import Banniere from "../components/banniere/HomeProducerCard";
 
-const scrollToBottom = () => {
-  window.scrollTo({
-    top: window.innerHeight,
-    behavior: "smooth",
-  });
-};
+const WelcomePopup = dynamic(
+  () => import("../components/popup-component/popup"),
+  {
+    ssr: false,
+  },
+);
 
 export default function Home() {
   const [produits, setProduits] = useState<any[]>([]);
@@ -19,7 +20,7 @@ export default function Home() {
 
   useEffect(() => {
     // Récupération des produits
-    fetch("http://localhost:3000/api/products")
+    fetch("/api/products")
       .then((res) => res.json())
       .then((resJson) => {
         if (resJson.success && Array.isArray(resJson.data)) {
@@ -29,7 +30,7 @@ export default function Home() {
       .catch((err) => console.error(err));
 
     // Récupération des producteurs
-    fetch("http://localhost:3000/api/producers")
+    fetch("/api/producers")
       .then((res) => res.json())
       .then((resJson) => {
         if (resJson.success && Array.isArray(resJson.data)) {
@@ -43,6 +44,7 @@ export default function Home() {
     <main className="w-full bg-[#FAF6F0] min-h-screen">
       {/* ================= ZONE BANNIÈRE ================= */}
       <Banniere />
+
       {/* ================= ZONE TITRE : VEDETTES ================= */}
       <div
         style={{
@@ -182,6 +184,9 @@ export default function Home() {
           ))}
         </div>
       </div>
+
+      {/* ================= POPUP ================= */}
+      <WelcomePopup />
     </main>
   );
 }

@@ -5,7 +5,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import HomeProductCard from "../components/HomeProductCard-component/HomeProductCard";
 import HomeProducerCard from "../components/HomeProducerCard-component/HomeProducerCard";
-import Banniere from "../components/banniere/HomeProducerCard";
+import Banniere from "../components/banniere-component/banniere";
 
 const WelcomePopup = dynamic(
   () => import("../components/popup-component/popup"),

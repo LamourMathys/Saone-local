@@ -25,9 +25,20 @@ exports.getAllProducers = async (req, res) => {
 exports.getProducerById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM producers WHERE id = $1", [
-      id,
-    ]);
+    const { rows } = await pool.query(
+      `
+      SELECT 
+        producers.*, 
+        users.user_photo, 
+        users.first_name AS first_name,
+        users.last_name AS last_name
+      FROM producers
+      INNER JOIN users ON producers.user_id = users.id
+      WHERE producers.id = $1
+    `,
+      [id],
+    );
+
     if (rows.length === 0) {
       return res
         .status(404)

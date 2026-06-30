@@ -1,4 +1,5 @@
 name: CI
+
 on: [push, pull_request]
 
 jobs:
@@ -40,13 +41,26 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Préparer le fichier .env
+        run: |
+          mkdir -p .deploy
+          cat > .deploy/.env <<EOF
+          DB_USER=saone
+          DB_NAME=saone
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+          PORT=${{ secrets.PORT }}
+          EOF
+
       - name: Copier fichiers sur EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSHKEY }}
-          source: "docker-compose.yml,server/init.sql,nginx.conf"
+          source: "docker-compose.yml,server/init.sql,nginx.conf,.deploy/.env"
           target: /home/${{ secrets.EC2_USERNAME }}/saone-local/
 
       - name: Déploiement via SSH
@@ -57,13 +71,7 @@ jobs:
           key: ${{ secrets.EC2_SSHKEY }}
           script: |
             mkdir -p /home/${{ secrets.EC2_USERNAME }}/saone-local/server
-
-            cat > /home/${{ secrets.EC2_USERNAME }}/saone-local/server/.env << 'EOF'
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
-            PORT=${{ secrets.PORT }}
-            EOF
+            mv /home/${{ secrets.EC2_USERNAME }}/saone-local/.env /home/${{ secrets.EC2_USERNAME }}/saone-local/server/.env
 
             echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
@@ -72,6 +80,7 @@ jobs:
             sudo docker compose pull
             sudo docker compose up -d
 
+            sleep 10
+            sudo docker compose restart api
             sleep 5
-            sudo docker compose exec -T db psql -U postgres -d saone_local -f /server/init.sql || true
             sudo docker compose exec -T api npm run seed

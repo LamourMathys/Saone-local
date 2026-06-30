@@ -74,7 +74,7 @@ jobs:
 
             cd /home/${{ secrets.EC2_USERNAME }}/saone-local/
 
-            sudo docker compose --env-file server/.env down || true
+            sudo docker compose --env-file server/.env down --remove-orphans || true
             sudo docker compose --env-file server/.env pull
             sudo docker compose --env-file server/.env up -d
 
@@ -83,6 +83,7 @@ jobs:
             sudo docker compose --env-file server/.env exec -T db psql -U saone -d saone -f /docker-entrypoint-initdb.d/init.sql || true
 
             sudo docker compose --env-file server/.env restart api
-            sleep 20
+
+            sleep 15
 
             sudo docker compose --env-file server/.env exec -T api npm run seed

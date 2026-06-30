@@ -29,35 +29,14 @@ exports.getProducerById = async (req, res) => {
 };
 
 exports.createProducer = async (req, res) => {
-  const { user_id, business_name, shop_location, siret } = req.body;
-
-  if (!user_id || !business_name || !shop_location || !siret) {
-    return res.status(400).json({
-      success: false,
-      error:
-        "Données invalides. Le nom d'exploitation, l'adresse de la ferme, le SIRET et l'ID de l'utilisateur sont obligatoires.",
-    });
-  }
+  const { user_id, producer_name, description, shop_location, producer_photo } =
+    req.body;
 
   try {
-    const userCheck = await pool.query("SELECT id FROM users WHERE id = $1", [
-      user_id,
-    ]);
-    if (userCheck.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Utilisateur spécifié non trouvé." });
-    }
-
     const { rows } = await pool.query(
-      "INSERT INTO producers (user_id, business_name, shop_location, siret) VALUES ($1, $2, $3, $4) RETURNING *",
-      [user_id, business_name, shop_location, siret],
+      "INSERT INTO producers (user_id, producer_name, description, shop_location, producer_photo) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [user_id, producer_name, description, shop_location, producer_photo],
     );
-
-    await pool.query("UPDATE users SET role = 'producer' WHERE id = $1", [
-      user_id,
-    ]);
-
     res.status(201).json({ success: true, data: rows[0] });
   } catch (error) {
     console.error(error);
@@ -67,86 +46,36 @@ exports.createProducer = async (req, res) => {
 
 exports.updateProducer = async (req, res) => {
   const { id } = req.params;
-  const { business_name, shop_location, siret } = req.body;
-
-  const currentUserId = req.user.userId;
-  const currentUserRole = req.user.role;
+  const { producer_name, description, shop_location, producer_photo } =
+    req.body;
 
   try {
-    const producerCheck = await pool.query(
-      "SELECT user_id FROM producers WHERE id = $1",
-      [id],
-    );
-
-    if (producerCheck.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ success: false, error: "Producteur non trouvé." });
-    }
-
-    const producerOwnerId = producerCheck.rows[0].user_id;
-
-    if (currentUserRole !== "admin" && producerOwnerId !== currentUserId) {
-      return res.status(403).json({
-        success: false,
-        error: "Accès refusé. Vous ne pouvez modifier que votre propre fiche.",
-      });
-    }
-
     const { rows } = await pool.query(
-      `UPDATE producers 
-       SET business_name = $1, shop_location = $2, siret = $3 
-       WHERE id = $4 
-       RETURNING *`,
-      [business_name, shop_location, siret, id],
+      "UPDATE producers SET producer_name = $1, description = $2, shop_location = $3, producer_photo = $4 WHERE id = $5 RETURNING *",
+      [producer_name, description, shop_location, producer_photo, id],
     );
-
-    return res.status(200).json({ success: true, data: rows[0] });
+    res.json({ success: true, data: rows[0] });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      success: false,
-      error: "Erreur lors de la mise à jour du producteur.",
-    });
+    res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };
 
 exports.deleteProducer = async (req, res) => {
   const { id } = req.params;
-  const currentUserId = req.user.userId;
-  const currentUserRole = req.user.role;
-
   try {
-    const producerCheck = await pool.query(
-      "SELECT user_id FROM producers WHERE id = $1",
+    const { rows } = await pool.query(
+      "DELETE FROM producers WHERE id = $1 RETURNING *",
       [id],
     );
-
-    if (producerCheck.rows.length === 0) {
+    if (rows.length === 0) {
       return res
         .status(404)
-        .json({ success: false, error: "Producteur non trouvé." });
+        .json({ success: false, error: "Producteur non trouvé" });
     }
-
-    const producerOwnerId = producerCheck.rows[0].user_id;
-
-    if (
-      currentUserRole !== "admin" &&
-      Number(producerOwnerId) !== Number(currentUserId)
-    ) {
-      return res.status(403).json({ success: false, error: "Accès refusé." });
-    }
-
-    await pool.query("UPDATE users SET role = 'client' WHERE id = $1", [
-      producerOwnerId,
-    ]);
-    await pool.query("DELETE FROM producers WHERE id = $1", [id]);
-
-    return res.status(204).send();
+    res.json({ success: true, data: rows[0] });
   } catch (error) {
     console.error(error);
-    return res
-      .status(500)
-      .json({ success: false, error: "Erreur lors de la suppression." });
+    res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };

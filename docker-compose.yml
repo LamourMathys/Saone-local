@@ -1,40 +1,9 @@
 services:
-  db:
-    image: postgres:16-alpine
-    environment:
-      POSTGRES_USER: saone
-      POSTGRES_PASSWORD: saone
-      POSTGRES_DB: saone
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
-
-  api:
-    image: ghcr.io/lamourmathys/saone-local:api
-    env_file:
-      - ./server/.env
-    depends_on:
-      - db
-
   app:
-    image: ghcr.io/lamourmathys/saone-local:app
-    environment:
-      - API_URL=http://api:3000
-      - PORT=3001
-    depends_on:
-      - api
-
-  nginx:
-    image: nginx:alpine
+    build: .
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - /etc/letsencrypt:/etc/letsencrypt:ro
-    depends_on:
-      - app
-      - api
-
-volumes:
-  postgres_data:
+      - "3000:3000"
+    env_file:
+      - server/.env
+    deploy-to-ec2:
+    needs: build-and-push

@@ -35,7 +35,7 @@ export default function WelcomePopup() {
         <div className="flex flex-col gap-4 text-sm text-[#714143] font-baloo mt-4">
           <div className="relative w-full h-32 rounded-xl overflow-hidden">
             <Image
-              src="/plus-sur-l'asso-banniere.jpg"
+              src="/plus-sur-l'asso-banniere.webp"
               alt="banniere plus sur l'association"
               fill
               className="object-cover"
@@ -53,7 +53,7 @@ export default function WelcomePopup() {
           <div className="grid grid-cols-2 gap-3 items-center">
             <div className="relative w-full h-36 rounded-xl overflow-hidden">
               <Image
-                src="/plus-sur-l'asso-boulangerie.jpg"
+                src="/plus-sur-l'asso-boulangerie.webp"
                 alt="banniere plus sur l'asso boulangerie"
                 fill
                 className="object-cover"
@@ -84,7 +84,7 @@ export default function WelcomePopup() {
             </p>
             <div className="relative w-full h-36 rounded-xl overflow-hidden">
               <Image
-                src="/plus-sur-l'asso-selfie.jpg"
+                src="/plus-sur-l'asso-selfie.webp"
                 alt="banniere plus sur l'asso selfie"
                 fill
                 className="object-cover"

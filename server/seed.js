@@ -160,7 +160,7 @@ const seed = async () => {
         1.2,
         "unité",
         30,
-        "/baguette.png",
+        "/baguette.webp",
       ],
       [
         michelPId,
@@ -170,7 +170,7 @@ const seed = async () => {
         2.5,
         "botte",
         30,
-        "/carottes.jpg",
+        "/carottes.webp",
       ],
       [
         nicolasPId,
@@ -180,7 +180,7 @@ const seed = async () => {
         3.3,
         "douzaine",
         20,
-        "oeufs.jpg",
+        "/oeufs.webp",
       ],
       [
         karimPId,
@@ -190,7 +190,7 @@ const seed = async () => {
         1.5,
         "unité",
         25,
-        "/pain-au-levain.avif",
+        "/pain-au-levain.webp",
       ],
       [
         karimPId,
@@ -200,7 +200,7 @@ const seed = async () => {
         2,
         "unité",
         20,
-        "/pain-aux-cereales.avif",
+        "/pain-aux-cereales.webp",
       ],
       [
         karimPId,
@@ -210,7 +210,7 @@ const seed = async () => {
         5,
         "500g",
         30,
-        "/pain-d'epeautre.avif",
+        "/pain-d'epeautre.webp",
       ],
       [
         karimPId,

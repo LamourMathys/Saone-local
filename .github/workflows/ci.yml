@@ -80,9 +80,9 @@ jobs:
 
             sleep 15
 
-            sudo docker compose --env-file server/.env exec -T db psql -U saone -d saone -f /server/init.sql || true
+            sudo docker compose --env-file server/.env exec -T db psql -U saone -d saone -f /docker-entrypoint-initdb.d/init.sql || true
 
             sudo docker compose --env-file server/.env restart api
-            sleep 10
+            sleep 20
 
             sudo docker compose --env-file server/.env exec -T api npm run seed

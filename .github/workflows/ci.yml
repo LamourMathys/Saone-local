@@ -78,7 +78,11 @@ jobs:
             sudo docker compose --env-file server/.env pull
             sudo docker compose --env-file server/.env up -d
 
-            sleep 10
+            sleep 15
+
+            sudo docker compose --env-file server/.env exec -T db psql -U saone -d saone -f /server/init.sql || true
+
             sudo docker compose --env-file server/.env restart api
-            sleep 5
+            sleep 10
+
             sudo docker compose --env-file server/.env exec -T api npm run seed

@@ -58,20 +58,21 @@ jobs:
           key: ${{ secrets.EC2_SSHKEY }}
           script: |
             mkdir -p /home/${{ secrets.EC2_USERNAME }}/saone-local/server
+
             cat > /home/${{ secrets.EC2_USERNAME }}/saone-local/server/.env << 'EOF'
             DB_USER=saone
             DB_NAME=saone
             DB_PASSWORD=${{ secrets.DB_PASSWORD }}
             DATABASE_URL=${{ secrets.DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+            JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            JWT_REFRESH_SECRET="${{ secrets.JWT_REFRESH_SECRET }}"
             PORT=${{ secrets.PORT }}
             EOF
 
             echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             cd /home/${{ secrets.EC2_USERNAME }}/saone-local/
 
-            sudo docker compose --env-file server/.env down --remove-orphans || true
+            sudo docker compose --env-file server/.env down --volumes --remove-orphans || true
             sudo docker compose --env-file server/.env pull
             sudo docker compose --env-file server/.env up -d
 

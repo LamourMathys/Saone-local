@@ -22,7 +22,7 @@ export default function HomeProductCard({
 }: ProductCardProps) {
   return (
     <Link
-      href={`/produits/${id}`}
+      href={`/produit/${id}`}
       style={{ display: "flex", flexDirection: "column" }}
     >
       <div

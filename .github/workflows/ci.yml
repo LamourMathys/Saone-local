@@ -36,7 +36,6 @@ jobs:
     name: Deploy to EC2
     runs-on: ubuntu-latest
     needs: build-and-push
-    # Ajout de la branche feature/front-end dans la condition
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/front-end')
     steps:
       - uses: actions/checkout@v3

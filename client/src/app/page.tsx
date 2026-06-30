@@ -19,22 +19,34 @@ export default function Home() {
   const [producteurs, setProducteurs] = useState<any[]>([]);
 
   useEffect(() => {
-    // Récupération des produits
+    // 1. Récupération des produits
     fetch("/api/products")
       .then((res) => res.json())
       .then((resJson) => {
         if (resJson.success && Array.isArray(resJson.data)) {
           setProduits(resJson.data);
+
+          // Préchargement en cache pendant que le popup est ouvert
+          resJson.data.slice(0, 6).forEach((produit: any) => {
+            const img = new window.Image();
+            img.src = produit.product_photo;
+          });
         }
       })
       .catch((err) => console.error(err));
 
-    // Récupération des producteurs
+    // 2. Récupération des producteurs
     fetch("/api/producers")
       .then((res) => res.json())
       .then((resJson) => {
         if (resJson.success && Array.isArray(resJson.data)) {
           setProducteurs(resJson.data);
+
+          // Préchargement en cache des photos des producteurs
+          resJson.data.slice(0, 3).forEach((producer: any) => {
+            const img = new window.Image();
+            img.src = producer.user_photo;
+          });
         }
       })
       .catch((err) => console.error(err));

@@ -11,8 +11,8 @@ DROP TABLE IF EXISTS refresh_tokens CASCADE;
 
 CREATE TABLE users (
   id          SERIAL PRIMARY KEY,
-  first_name  VARCHAR,
-  last_name   VARCHAR,
+  first_name  VARCHAR(30),
+  last_name   VARCHAR(30),
   email       VARCHAR UNIQUE NOT NULL,
   password    VARCHAR(60),
   role        VARCHAR,
@@ -26,8 +26,8 @@ CREATE TABLE users (
 CREATE TABLE producers (
   id             SERIAL PRIMARY KEY,
   user_id        INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE, 
-  shop_location  VARCHAR,
-  business_name  VARCHAR,
+  shop_location  VARCHAR(100),
+  business_name  VARCHAR(50),
   siret          VARCHAR(14)
 );
 

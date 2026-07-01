@@ -87,7 +87,7 @@ export default function ProducerProfile() {
             </div>
 
             <p className="mt-0.5 text-xs font-bold text-[#9AA433]">
-              {producer.business_name}, maraîcher à{" "}
+              {producer.business_name}, produit à{" "}
               {producer.shop_location || "Crissey"}
             </p>
           </div>

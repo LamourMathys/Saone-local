@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3001", "http://saone-local.webhop.me:3001"],
+    origin: ["http://localhost:3001", "https://saone-local.webhop.me"],
     credentials: true,
   }),
 );

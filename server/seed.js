@@ -82,7 +82,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecurisenicolas", 10),
         "producer",
         "local",
-        null,
+        "/saonelocal-nicolas.png",
       ],
     );
 

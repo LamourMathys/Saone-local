@@ -65,7 +65,6 @@ export default function Header({ setActiveTab = (value: string) => {} }) {
               <Link
                 href="/association"
                 onClick={() => handleLinkClick("a-propos")}
-                className="text-base"
               >
                 plus sur l&lsquo;asso
               </Link>

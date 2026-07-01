@@ -28,7 +28,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="w-full aspect-square rounded-xl overflow-hidden relative shrink-0">
         <Image
           src={product.product_photo || "/placeholder.png"}
-          alt={product.name}
+          alt="Produit"
           fill
           unoptimized
           priority

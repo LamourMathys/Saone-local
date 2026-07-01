@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Open_Sans } from "next/font/google";
 import ProfileHeader from "../../../components/boxandbouton-component/boxandbouton";
-import ProductCard from "../../../components/producerproductcard/card";
+import ProductCard from "../../../components/productcard/card";
 
 const openSans = Open_Sans({
   subsets: ["latin"],

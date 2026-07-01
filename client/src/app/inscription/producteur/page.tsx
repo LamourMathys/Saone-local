@@ -51,8 +51,7 @@ function InscriptionProducteurForm() {
         setError(data.error || "Erreur lors de la création de votre fiche");
         return;
       }
-
-      router.push("/connexion");
+      router.push("/");
     } catch (err) {
       setError("Impossible de contacter le serveur.");
     } finally {

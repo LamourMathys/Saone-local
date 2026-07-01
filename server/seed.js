@@ -54,7 +54,7 @@ const seed = async () => {
 
         "Théo",
         "nom",
-        "Théo@saonelocal.fr",
+        "Theo@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseThéo", 10),
         "client",
         "local",

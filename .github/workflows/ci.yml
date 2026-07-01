@@ -30,7 +30,9 @@ jobs:
           docker push ghcr.io/lamourmathys/saone-local:api
       - name: Build & Push App
         run: |
-          docker build --target frontend -t ghcr.io/lamourmathys/saone-local:app .
+          docker build --target frontend \
+            --build-arg NEXT_PUBLIC_API_URL=https://saone-local.webhop.me/api \
+            -t ghcr.io/lamourmathys/saone-local:app .
           docker push ghcr.io/lamourmathys/saone-local:app
 
   deploy-to-ec2:

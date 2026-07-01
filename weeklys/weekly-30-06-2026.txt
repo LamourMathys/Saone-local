@@ -1,1 +1,56 @@
+Weekly n°11 30/06/2026 :
+sujets à préparer :
+soutenance 
+fin du projet
+
+Ce qui a été fait la semaine précédente :
+Marketing :
+rien 
+Programmation :
+fini back end 
+en plein dans le front end 
+lien qui fonctionne, l’appli fonctionne
+accueil, pop up, menu burger
+
+ensemble: 
+roadmap 
+
+
+À modifier :
+Marketing :
+rien
+Programmation :
+rien
+
+À rajouter :
+Marketing :
+rien
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+certaines images prennent trop de place, doivent être optimisées
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+rien
+
+objectifs globaux : 
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+roadmap
+Programmation :
+finir le front end
+Ensemble :
+s’entraîner pour la soutenance
 

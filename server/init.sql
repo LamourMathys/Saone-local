@@ -17,6 +17,7 @@ CREATE TABLE users (
   password    VARCHAR(60),
   role        VARCHAR,
   provider    VARCHAR,
+  description VARCHAR(100),
   provider_id VARCHAR,
   user_photo  VARCHAR,
   created_at  TIMESTAMP DEFAULT NOW(),
@@ -41,8 +42,8 @@ CREATE TABLE products (
   id            SERIAL PRIMARY KEY,
   producer_id   INTEGER REFERENCES producers(id) ON DELETE CASCADE,
   category_id   INTEGER REFERENCES categories(id),
-  product_name  VARCHAR,
-  description   VARCHAR,
+  product_name  VARCHAR(30),
+  description   VARCHAR(100),
   price         DECIMAL,
   unit          VARCHAR,
   stock         INTEGER,
@@ -80,6 +81,7 @@ CREATE TABLE events (
   description VARCHAR,
   location    VARCHAR,
   event_date  TIMESTAMP,
+  event_photo   VARCHAR(100), /*a rajouter dans le mcd mld*/
   creator_id  INTEGER REFERENCES users(id)
 );
 

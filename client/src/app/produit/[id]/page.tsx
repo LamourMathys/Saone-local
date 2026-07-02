@@ -19,7 +19,7 @@ interface ProductData {
   price: number;
   unit: string;
   product_photo?: string;
-  product_description?: string;
+  description?: string;
   producer_id: number;
 }
 
@@ -46,29 +46,31 @@ export default function ProductDetail() {
         if (resJson.success && resJson.data) {
           setProduct(resJson.data);
           const currentProducerId = resJson.data.producer_id;
-          
+
           if (currentProducerId) {
             fetch(`/api/producers`)
               .then((res) => res.json())
               .then((prodJson) => {
                 if (prodJson.success && Array.isArray(prodJson.data)) {
                   const currentProducer = prodJson.data.find(
-                    (p: any) => String(p.id) === String(currentProducerId)
+                    (p: any) => String(p.id) === String(currentProducerId),
                   );
                   if (currentProducer) setProducer(currentProducer);
                 }
-              }).catch(console.error);
+              })
+              .catch(console.error);
 
             fetch(`/api/products?producerId=${currentProducerId}`)
               .then((res) => res.json())
               .then((productsJson) => {
                 if (productsJson.success && Array.isArray(productsJson.data)) {
                   const others = productsJson.data.filter(
-                    (p: any) => String(p.id) !== String(params.id)
+                    (p: any) => String(p.id) !== String(params.id),
                   );
                   setSuggestedProducts(others.slice(0, 3));
                 }
-              }).catch(console.error);
+              })
+              .catch(console.error);
           }
         }
       })
@@ -83,28 +85,49 @@ export default function ProductDetail() {
   }).format(product.price);
 
   return (
-    <main className={`${openSans.className} w-full min-h-screen bg-[#FAF6F0] p-4 flex flex-col gap-6`}>
-      <BoxandBouton text="produit" boxColor="bg-[#8B362E]" buttonColor="bg-[#8B362E]" />
+    <main
+      className={`${openSans.className} w-full min-h-screen bg-[#FAF6F0] p-4 flex flex-col gap-6`}
+    >
+      <BoxandBouton
+        text="produit"
+        boxColor="bg-[#8B362E]"
+        buttonColor="bg-[#8B362E]"
+      />
 
       <div className="flex gap-4 items-start w-full">
         <div className="w-[45%] flex flex-col gap-3 shrink-0">
           <div className="w-full aspect-square rounded-xl overflow-hidden relative">
-            <Image 
-              src={product.product_photo || "/productplaceholder.png"} 
-              alt={product.product_name} 
-              fill 
-              unoptimized 
-              priority 
-              className="object-cover" 
+            <Image
+              src={product.product_photo || "/productplaceholder.png"}
+              alt={product.product_name}
+              fill
+              unoptimized
+              priority
+              className="object-cover"
             />
           </div>
 
           <div className="bg-white rounded-xl p-3 flex flex-col gap-1 w-full text-[10px] font-bold text-[#9AA433]">
-            <h3 className="border-b border-gray-100 pb-0.5 mb-0.5">Caractéristiques:</h3>
+            <h3 className="border-b border-gray-100 pb-0.5 mb-0.5">
+              Caractéristiques:
+            </h3>
             {producer && (
               <>
-                <p>Producteur : <Link href={`/producteur/${producer.id}`} className="underline hover:opacity-80">{producer.first_name} {producer.last_name}</Link></p>
-                {producer.business_name && <p>Entreprise : <span className="font-bold">{producer.business_name}</span></p>}
+                <p>
+                  Producteur :{" "}
+                  <Link
+                    href={`/producteur/${producer.id}`}
+                    className="underline hover:opacity-80"
+                  >
+                    {producer.first_name} {producer.last_name}
+                  </Link>
+                </p>
+                {producer.business_name && (
+                  <p>
+                    Entreprise :{" "}
+                    <span className="font-bold">{producer.business_name}</span>
+                  </p>
+                )}
               </>
             )}
           </div>
@@ -112,23 +135,41 @@ export default function ProductDetail() {
 
         <div className="flex flex-col gap-2 flex-1 min-w-0 pt-1 text-[#8B362E]">
           <div className="flex justify-between items-start gap-1 w-full">
-            <h1 className="text-lg font-bold leading-tight">{product.product_name}</h1>
+            <h1 className="text-lg font-bold leading-tight">
+              {product.product_name}
+            </h1>
             <button className="text-gray-400 text-lg shrink-0">☆</button>
           </div>
 
-          <p className="text-[10px] opacity-90 leading-tight">{product.product_description}</p>
+          <p className="text-[10px] opacity-90 leading-tight">
+            {product.description}
+          </p>
 
           <div className="mt-2">
-            <p className="text-base font-bold">{formattedPrice}/{product.unit}</p>
-            <p className="text-[8px] opacity-80 leading-tight mt-0.5">TVA 5,5% incluse</p>
+            <p className="text-base font-bold">
+              {formattedPrice}/{product.unit}
+            </p>
+            <p className="text-[8px] opacity-80 leading-tight mt-0.5">
+              TVA 5,5% incluse
+            </p>
           </div>
 
           <div className="flex items-center gap-2 mt-2 text-[10px] font-bold text-[#9AA433]">
             <span>Qté</span>
             <div className="flex items-center bg-white rounded-lg px-2 py-0.5 text-gray-800">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-[#9AA433] text-xs px-1">-</button>
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="text-[#9AA433] text-xs px-1"
+              >
+                -
+              </button>
               <span className="px-1">{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)} className="text-[#9AA433] text-xs px-1">+</button>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="text-[#9AA433] text-xs px-1"
+              >
+                +
+              </button>
             </div>
             <span className="text-[9px] font-semibold">En stock</span>
           </div>
@@ -141,20 +182,23 @@ export default function ProductDetail() {
 
       {suggestedProducts.length > 0 && (
         <section className="w-full flex flex-col gap-3 mt-4">
-          <h2 className="text-sm font-bold text-[#8B362E]">Ça pourrait vous intéresser :</h2>
-          
+          <h2 className="text-sm font-bold text-[#8B362E]">
+            Ça pourrait vous intéresser :
+          </h2>
+
           <div className="grid grid-cols-3 gap-2 w-full mt-8">
             {suggestedProducts.map((suggested) => (
-              <ProductCard 
-                key={suggested.id} 
+              <ProductCard
+                key={suggested.id}
                 product={{
                   id: suggested.id,
                   name: suggested.product_name,
                   price: suggested.price,
                   unit: suggested.unit,
-                  product_photo: suggested.product_photo || "/productplaceholder.png",
-                  producer_id: suggested.producer_id
-                }} 
+                  product_photo:
+                    suggested.product_photo || "/productplaceholder.png",
+                  producer_id: suggested.producer_id,
+                }}
               />
             ))}
           </div>

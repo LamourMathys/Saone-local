@@ -17,15 +17,15 @@ const seed = async () => {
     );
 
     const usersResult = await pool.query(
-      `INSERT INTO users (first_name, last_name, email, password, role, provider, user_photo)
+      `INSERT INTO users (first_name, last_name, email, password, role, provider, description, user_photo)
     VALUES 
-    ($1, $2, $3, $4, $5, $6, $7),
-    ($8, $9, $10, $11, $12, $13, $14),
-    ($15, $16, $17, $18, $19, $20, $21),
-    ($22, $23, $24, $25, $26, $27, $28),
-    ($29, $30, $31, $32, $33, $34, $35),
-    ($36, $37, $38, $39, $40, $41, $42),
-    ($43, $44, $45, $46, $47, $48, $49)
+    ($1, $2, $3, $4, $5, $6, $7, $8),
+    ($9, $10, $11, $12, $13, $14, $15, $16),
+    ($17, $18, $19, $20, $21, $22, $23, $24),
+    ($25, $26, $27, $28, $29, $30, $31, $32),
+    ($33, $34, $35, $36, $37, $38, $39, $40),
+    ($41, $42, $43, $44, $45, $46, $47, $48),
+    ($49, $50, $51, $52, $53, $54, $55, $56)
     ON CONFLICT (email) DO NOTHING RETURNING id, email`,
       [
         "Admin",
@@ -34,6 +34,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseadmin", 10),
         "admin",
         "local",
+        "Administrateur principal de la plateforme.",
         null,
 
         "Admin",
@@ -42,6 +43,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseadmin2", 10),
         "admin",
         "local",
+        "Modérateur et support technique.",
         null,
 
         "Isabelle",
@@ -50,6 +52,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseIsabelle", 10),
         "producer",
         "local",
+        "Vigneronne au Domaine de la Côte Chalonnaise, Mercurey.",
         "/saonelocal-isabelle.jpg",
 
         "Théo",
@@ -58,6 +61,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseThéo", 10),
         "client",
         "local",
+        "Si c'est galère, je commande sur Amazon et basta.",
         null,
 
         "Karim",
@@ -66,6 +70,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseKarim", 10),
         "producer",
         "local",
+        "Karim Benchouia, artisant boulanger à Saint-Marcel, labellisé Saveurs de Bourgogne.",
         "/saonelocal-karim.jpg",
 
         "Michel",
@@ -74,6 +79,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecuriseMichel", 10),
         "producer",
         "local",
+        "Cultive des légumes frais et de saison avec passion, dans le respect de la terre et des saveurs.",
         "/saonelocal-michel.jpg",
 
         "Nicolas",
@@ -82,6 +88,7 @@ const seed = async () => {
         await bcrypt.hash("MDPsecurisenicolas", 10),
         "producer",
         "local",
+        "Éleveur de poules plein air et apiculteur passionné.",
         "/saonelocal-nicolas.png",
       ],
     );

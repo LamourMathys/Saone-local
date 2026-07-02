@@ -18,6 +18,7 @@ interface ProducerData {
   shop_location: string;
   first_name: string;
   last_name: string;
+  description: string;
   user_photo: string;
 }
 
@@ -90,11 +91,16 @@ export default function ProducerProfile() {
               {producer.business_name}, produit à{" "}
               {producer.shop_location || "Crissey"}
             </p>
+            <p className="text-[10px] opacity-90 leading-tight">
+              {producer.description}
+            </p>
           </div>
         </section>
       )}
-
-      <div className="grid grid-cols-3 gap-2 justify-items-center w-full px-2">
+      <h2 className="text-sm font-bold text-[#8B362E]">
+        Ça pourrait vous intéresser :
+      </h2>
+      <div className="grid grid-cols-3 gap-2 justify-items-center w-full px-2 pt-8">
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

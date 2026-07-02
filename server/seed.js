@@ -30,7 +30,7 @@ const seed = async () => {
       [
         "Admin",
         "1",
-        "Admin@saonelocal.fr",
+        "admin@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseadmin", 10),
         "admin",
         "local",
@@ -48,7 +48,7 @@ const seed = async () => {
 
         "Isabelle",
         "Fontaine-Marchais",
-        "Isabelle.FM@saonelocal.fr",
+        "isabelle.fm@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseIsabelle", 10),
         "producer",
         "local",
@@ -57,7 +57,7 @@ const seed = async () => {
 
         "Théo",
         "nom",
-        "Theo@saonelocal.fr",
+        "theo@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseThéo", 10),
         "client",
         "local",
@@ -66,7 +66,7 @@ const seed = async () => {
 
         "Karim",
         "Benchouia",
-        "Karim@saonelocal.fr",
+        "karim@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseKarim", 10),
         "producer",
         "local",
@@ -75,7 +75,7 @@ const seed = async () => {
 
         "Michel",
         "Durant",
-        "Michel@saonelocal.fr",
+        "michel@saonelocal.fr",
         await bcrypt.hash("MDPsecuriseMichel", 10),
         "producer",
         "local",
@@ -103,9 +103,9 @@ const seed = async () => {
       return fromInsert ? fromInsert.id : null;
     };
 
-    const isabelleId = await getUserId("Isabelle.FM@saonelocal.fr");
-    const michelId = await getUserId("Michel@saonelocal.fr");
-    const karimId = await getUserId("Karim@saonelocal.fr");
+    const isabelleId = await getUserId("isabelle.fm@saonelocal.fr");
+    const michelId = await getUserId("michel@saonelocal.fr");
+    const karimId = await getUserId("karim@saonelocal.fr");
     const nicolasId = await getUserId("nicolas@saonelocal.fr");
 
     const upsertProducer = async (

@@ -2,7 +2,21 @@ const pool = require("../db");
 
 exports.getAllProducers = async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM producers");
+    const query = `
+      SELECT 
+        producers.id, 
+        producers.user_id, 
+        producers.shop_location, 
+        producers.business_name, 
+        producers.siret,
+        users.user_photo,
+        users.first_name,
+        users.last_name
+      FROM producers
+      JOIN users ON producers.user_id = users.id
+    `;
+    
+    const { rows } = await pool.query(query);
     res.json({ success: true, data: rows });
   } catch (error) {
     console.error(error);
@@ -13,9 +27,23 @@ exports.getAllProducers = async (req, res) => {
 exports.getProducerById = async (req, res) => {
   const { id } = req.params;
   try {
-    const { rows } = await pool.query("SELECT * FROM producers WHERE id = $1", [
-      id,
-    ]);
+    const { rows } = await pool.query(
+      `SELECT 
+        producers.id, 
+        producers.user_id, 
+        producers.shop_location, 
+        producers.business_name, 
+        producers.siret,
+        users.user_photo,
+        users.first_name,
+        users.last_name,
+        users.description
+      FROM producers 
+      JOIN users ON producers.user_id = users.id
+      WHERE producers.id = $1`, 
+      [id]
+    );
+
     if (rows.length === 0) {
       return res
         .status(404)

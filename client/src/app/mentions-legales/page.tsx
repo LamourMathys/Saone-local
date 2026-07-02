@@ -1,9 +1,16 @@
 import Banniere from "../../components/banniere-component/banniere";
+import ProfileHeader from "../../components/boxandbouton-component/boxandbouton";
 
 export default function Mentions() {
   return (
     <main className="w-full">
-      {/* bloc "mention legal" en haut à droite à ajouter */}
+      <div className="pt-4 px-4">
+              <ProfileHeader
+                text="mentions légales"
+                boxColor="bg-[#FACA92]"
+                buttonColor="bg-[#FACA92]"
+              />
+            </div>
       <Banniere />
       <div className="px-14 py-20">
         Mentions légales - SaôneLocal Mise à jour : avril 2026 <br />

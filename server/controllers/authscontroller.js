@@ -5,17 +5,19 @@ const pool = require("../db");
 exports.register = async (req, res) => {
   const { first_name, last_name, email, password } = req.body;
   try {
-    const userExists = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email],
-    );
-
     if (!first_name || !last_name || !email || !password) {
       return res.status(400).json({
         success: false,
         error: "Tous les champs sont obligatoires.",
       });
     }
+
+    const normalizedEmail = email.toLowerCase();
+
+    const userExists = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [normalizedEmail],
+    );
 
     if (userExists.rows.length > 0) {
       return res
@@ -26,8 +28,8 @@ exports.register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { rows } = await pool.query(
-      "INSERT INTO users (first_name, last_name, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, first_name, last_name, email, role",
-      [first_name, last_name, email, hashedPassword, "client"],
+      "INSERT INTO users (first_name, last_name, email, password, role) VALUES ($1, $2, $3, $4) RETURNING id, first_name, last_name, email, role",
+      [first_name, last_name, normalizedEmail, hashedPassword, "client"],
     );
 
     const user = rows[0];
@@ -81,8 +83,17 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "L'email et le mot de passe sont obligatoires.",
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase();
+
     const result = await pool.query("SELECT * FROM users WHERE email = $1", [
-      email,
+      normalizedEmail,
     ]);
     const user = result.rows[0];
 
@@ -146,9 +157,10 @@ exports.updateUser = async (req, res) => {
   const { first_name, last_name, email, role } = req.body;
   try {
     if (email) {
+      const normalizedEmail = email.toLowerCase();
       const emailCheck = await pool.query(
         "SELECT * FROM users WHERE email = $1 AND id <> $2",
-        [email, id],
+        [normalizedEmail, id],
       );
       if (emailCheck.rows.length > 0) {
         return res.status(400).json({
@@ -160,7 +172,7 @@ exports.updateUser = async (req, res) => {
 
     const { rows } = await pool.query(
       "UPDATE users SET first_name = $1, last_name = $2, email = $3, role = $4 WHERE id = $5 RETURNING id, first_name, last_name, email, role",
-      [first_name, last_name, email, role, id],
+      [first_name, last_name, email ? email.toLowerCase() : null, role, id],
     );
 
     if (rows.length === 0) {
@@ -297,7 +309,7 @@ exports.logout = async (req, res) => {
     console.error(error);
     return res.status(500).json({
       success: false,
-      error: "Une erreur est survenue lors de l'inscription.",
+      error: "Une erreur est survenue lors de la déconnexion.",
     });
   }
 };

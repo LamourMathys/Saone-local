@@ -52,7 +52,7 @@ export default function NavBar({
       </Link>
 
       <Link
-        href="/recherche"
+        href="/catalogue"
         className="hover:underline flex-1 h-full flex items-center justify-center active:scale-95 transition-transform"
         onClick={() => setActiveTab("search")}
       >

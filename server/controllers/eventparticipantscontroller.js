@@ -10,6 +10,20 @@ exports.getAllEventParticipants = async (req, res) => {
   }
 };
 
+exports.getAllEventParticipantsByEventId = async (req, res) => {
+  const { eventId } = req.params;
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM event_participants WHERE event_id = $1",
+      [eventId],
+    );
+    res.json({ success: true, data: rows });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Une erreur est survenue" });
+  }
+};
+
 exports.getEventParticipantById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -45,7 +59,6 @@ exports.createEventParticipant= async (req, res) => {
 };
 
 exports.updateEventParticipant = async (req, res) => {
-  // Shouldn't be used outside of debugging
   const { id } = req.params;
   const { user_id, event_id, role } = req.body;
 

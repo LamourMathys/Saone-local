@@ -1,4 +1,5 @@
 name: CI
+
 on: [push, pull_request]
 
 jobs:
@@ -10,7 +11,7 @@ jobs:
         run: test -f readme.md
       - name: Vérifier les .txt
         run: find ./weeklys -name "*.txt" | grep .
-      - name: Vérifier si il y a des fichiers dans le dossier "Livrables"
+      - name: Vérifier les Livrables
         run: find ./Livrables -type f | grep .
 
   build-and-push:

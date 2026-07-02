@@ -1,14 +1,24 @@
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Footer() {
+export default function Footer({ isLoggedIn = false, hideAuthLinks = false }) {
   return (
     <footer className="w-full pt-10 pb-20 px-10">
       <div className="grid grid-cols-2 gap-y-5 gap-x-10 text-[15px] font-medium">
         <div className="space-y-4">
-          <Link href="/connexion" className="block hover:underline">
-            se connecter
-          </Link>
+          
+          {!hideAuthLinks && (
+            isLoggedIn ? (
+              <Link href="/profil" className="block hover:underline">
+                mon profil
+              </Link>
+            ) : (
+              <Link href="/connexion" className="block hover:underline">
+                se connecter
+              </Link>
+            )
+          )}
+
           <Link href="/favoris" className="block hover:underline">
             favoris
           </Link>
@@ -22,7 +32,7 @@ export default function Footer() {
             catalogue
           </Link>
           <Link href="/association" className="block hover:underline">
-            plus sur l&lsquo;asso {/* &lsquo; permet d'afficher une citation */}
+            plus sur l&lsquo;asso
           </Link>
         </div>
 

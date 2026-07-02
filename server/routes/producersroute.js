@@ -9,7 +9,7 @@ const { verifyAdmin } = require("../verification/adminverification");
 router.get("/", producerscontroller.getAllProducers);
 router.get("/:id", producerscontroller.getProducerById);
 
-router.post("/", verifyAuth, verifyAdmin, producerscontroller.createProducer);
+router.post("/", verifyAuth, producerscontroller.createProducer);
 router.put(
   "/:id",
   verifyAuth,

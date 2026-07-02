@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 exports.getAllUsers = async (req, res) => {
   try {
     const { rows } = await pool.query(
-      "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login FROM users",
+      "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at, last_login FROM users",
     );
     res.json({ success: true, data: rows });
   } catch (error) {
@@ -17,7 +17,7 @@ exports.getUserById = async (req, res) => {
   try {
     const [user] = (
       await pool.query(
-        "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login FROM users WHERE id = $1",
+        "SELECT id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at, last_login FROM users WHERE id = $1",
         [id],
       )
     ).rows;
@@ -43,13 +43,14 @@ exports.createUser = async (req, res) => {
     provider,
     provider_id,
     user_photo,
+    description,
   } = req.body;
   try {
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
 
     const [user] = (
       await pool.query(
-        "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at",
+        "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at",
         [
           first_name,
           last_name,
@@ -59,6 +60,7 @@ exports.createUser = async (req, res) => {
           provider,
           provider_id,
           user_photo,
+          description,
         ],
       )
     ).rows;
@@ -110,7 +112,7 @@ exports.updateUser = async (req, res) => {
     }
 
     values.push(id);
-    const query = `UPDATE users SET ${fields.join(", ")} WHERE id = $${values.length} RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, created_at, last_login`;
+    const query = `UPDATE users SET ${fields.join(", ")} WHERE id = $${values.length} RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at, last_login`;
 
     const result = await pool.query(query, values);
     const user = result.rows[0];

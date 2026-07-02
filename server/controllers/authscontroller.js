@@ -10,7 +10,6 @@ exports.register = async (req, res) => {
       [email],
     );
 
-    //si il lmanque une info la creation est rejete
     if (!first_name || !last_name || !email || !password) {
       return res.status(400).json({
         success: false,
@@ -24,17 +23,51 @@ exports.register = async (req, res) => {
         .json({ success: false, error: "Cet email est déjà utilisé." });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10); //salt de 10 rounds
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const { rows } = await pool.query(
       "INSERT INTO users (first_name, last_name, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING id, first_name, last_name, email, role",
       [first_name, last_name, email, hashedPassword, "client"],
     );
 
+    const user = rows[0];
+
+    const accessToken = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "15m" },
+    );
+
+    const refreshToken = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_REFRESH_SECRET,
+      { expiresIn: "30d" },
+    );
+
+    await pool.query(
+      "INSERT INTO refresh_tokens (token, user_id, expires_at) VALUES ($1, $2, NOW() + INTERVAL '30 days') ON CONFLICT (user_id) DO UPDATE SET token = EXCLUDED.token, expires_at = EXCLUDED.expires_at",
+      [refreshToken, user.id],
+    );
+
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    };
+
+    res.cookie("accessToken", accessToken, {
+      ...cookieOptions,
+      maxAge: 15 * 60 * 1000,
+    });
+    res.cookie("refreshToken", refreshToken, {
+      ...cookieOptions,
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
     res.status(201).json({
       success: true,
       message: "Utilisateur créé avec succès !",
-      user: rows[0],
+      user,
     });
   } catch (error) {
     console.error(error);

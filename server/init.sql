@@ -11,12 +11,13 @@ DROP TABLE IF EXISTS refresh_tokens CASCADE;
 
 CREATE TABLE users (
   id          SERIAL PRIMARY KEY,
-  first_name  VARCHAR,
-  last_name   VARCHAR,
+  first_name  VARCHAR(30),
+  last_name   VARCHAR(30),
   email       VARCHAR UNIQUE NOT NULL,
   password    VARCHAR(60),
   role        VARCHAR,
   provider    VARCHAR,
+  description VARCHAR(100),
   provider_id VARCHAR,
   user_photo  VARCHAR,
   created_at  TIMESTAMP DEFAULT NOW(),
@@ -26,8 +27,8 @@ CREATE TABLE users (
 CREATE TABLE producers (
   id             SERIAL PRIMARY KEY,
   user_id        INTEGER UNIQUE NOT NULL REFERENCES users(id) ON DELETE CASCADE, 
-  shop_location  VARCHAR,
-  business_name  VARCHAR,
+  shop_location  VARCHAR(100),
+  business_name  VARCHAR(50),
   siret          VARCHAR(14)
 );
 
@@ -41,8 +42,8 @@ CREATE TABLE products (
   id            SERIAL PRIMARY KEY,
   producer_id   INTEGER REFERENCES producers(id) ON DELETE CASCADE,
   category_id   INTEGER REFERENCES categories(id),
-  product_name  VARCHAR,
-  description   VARCHAR,
+  product_name  VARCHAR(30),
+  description   VARCHAR(100),
   price         DECIMAL,
   unit          VARCHAR,
   stock         INTEGER,
@@ -80,14 +81,14 @@ CREATE TABLE events (
   description VARCHAR,
   location    VARCHAR,
   event_date  TIMESTAMP,
+  event_photo   VARCHAR(100), /*a rajouter dans le mcd mld*/
   creator_id  INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE event_participants (
-  id       SERIAL PRIMARY KEY,
-  event_id INTEGER REFERENCES events(id),
-  user_id  INTEGER REFERENCES users(id),
-  role     VARCHAR
+  id          SERIAL PRIMARY KEY,
+  event_id    INTEGER REFERENCES events(id),
+  role        VARCHAR
 );
 
 CREATE TABLE refresh_tokens (

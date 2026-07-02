@@ -17,59 +17,79 @@ const seed = async () => {
     );
 
     const usersResult = await pool.query(
-      `INSERT INTO users (first_name, last_name, email, password, role, provider)
+      `INSERT INTO users (first_name, last_name, email, password, role, provider, description, user_photo)
     VALUES 
-    ($1, $2, $3, $4, $5, $6),
-    ($7, $8, $9, $10, $11, $12),
-    ($13, $14, $15, $16, $17, $18),
-    ($19, $20, $21, $22, $23, $24),
-    ($25, $26, $27, $28, $29, $30),
-    ($31, $32, $33, $34, $35, $36),
-    ($37, $38, $39, $40, $41, $42)
+    ($1, $2, $3, $4, $5, $6, $7, $8),
+    ($9, $10, $11, $12, $13, $14, $15, $16),
+    ($17, $18, $19, $20, $21, $22, $23, $24),
+    ($25, $26, $27, $28, $29, $30, $31, $32),
+    ($33, $34, $35, $36, $37, $38, $39, $40),
+    ($41, $42, $43, $44, $45, $46, $47, $48),
+    ($49, $50, $51, $52, $53, $54, $55, $56)
     ON CONFLICT (email) DO NOTHING RETURNING id, email`,
       [
-        "Mathys",
-        "nom",
-        "mathys@saonelocal.fr",
-        await bcrypt.hash("MDPsecurisemathys", 10),
+        "Admin",
+        "1",
+        "Admin@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseadmin", 10),
         "admin",
         "local",
-        "Giacomo",
-        "nom",
-        "giacomo@saonelocal.fr",
-        await bcrypt.hash("MDPsecurisegiacomo", 10),
+        "Administrateur principal de la plateforme.",
+        null,
+
+        "Admin",
+        "2",
+        "admin2@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseadmin2", 10),
         "admin",
         "local",
-        "Romane",
-        "nom",
-        "romane@saonelocal.fr",
-        await bcrypt.hash("MDPsecuriseromane", 10),
+        "Modérateur et support technique.",
+        null,
+
+        "Isabelle",
+        "Fontaine-Marchais",
+        "Isabelle.FM@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseIsabelle", 10),
         "producer",
         "local",
-        "Alexandra",
+        "Vigneronne au Domaine de la Côte Chalonnaise, Mercurey.",
+        "/saonelocal-isabelle.jpg",
+
+        "Théo",
         "nom",
-        "alexandra@saonelocal.fr",
-        await bcrypt.hash("MDPsecurisealexandra", 10),
+        "Theo@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseThéo", 10),
         "client",
         "local",
-        "Julien",
-        "nom",
-        "julien@saonelocal.fr",
-        await bcrypt.hash("MDPsecurisejulien", 10),
+        "Si c'est galère, je commande sur Amazon et basta.",
+        null,
+
+        "Karim",
+        "Benchouia",
+        "Karim@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseKarim", 10),
         "producer",
         "local",
-        "Camille",
-        "nom",
-        "camille@saonelocal.fr",
-        await bcrypt.hash("MDPsecurisecamille", 10),
+        "Karim Benchouia, artisant boulanger à Saint-Marcel, labellisé Saveurs de Bourgogne.",
+        "/saonelocal-karim.jpg",
+
+        "Michel",
+        "Durant",
+        "Michel@saonelocal.fr",
+        await bcrypt.hash("MDPsecuriseMichel", 10),
         "producer",
         "local",
+        "Cultive des légumes frais et de saison avec passion, dans le respect de la terre et des saveurs.",
+        "/saonelocal-michel.jpg",
+
         "Nicolas",
-        "nom",
+        "Avis",
         "nicolas@saonelocal.fr",
         await bcrypt.hash("MDPsecurisenicolas", 10),
         "producer",
         "local",
+        "Éleveur de poules plein air et apiculteur passionné.",
+        "/saonelocal-nicolas.png",
       ],
     );
 
@@ -83,9 +103,9 @@ const seed = async () => {
       return fromInsert ? fromInsert.id : null;
     };
 
-    const romaneId = await getUserId("romane@saonelocal.fr");
-    const julienId = await getUserId("julien@saonelocal.fr");
-    const camilleId = await getUserId("camille@saonelocal.fr");
+    const isabelleId = await getUserId("Isabelle.FM@saonelocal.fr");
+    const michelId = await getUserId("Michel@saonelocal.fr");
+    const karimId = await getUserId("Karim@saonelocal.fr");
     const nicolasId = await getUserId("nicolas@saonelocal.fr");
 
     const upsertProducer = async (
@@ -110,97 +130,97 @@ const seed = async () => {
       return existing.rows[0].id;
     };
 
-    const romaneProducerId = await upsertProducer(
-      romaneId,
-      "Les Jardins de Saône",
-      "12 rue du Marché, Chalon-sur-Saône",
-      "12345678900011",
+    const isabellePId = await upsertProducer(
+      isabelleId,
+      "Domaine de la Côte Chalonnaise",
+      "Mercurey",
+      "11111111111111",
     );
 
-    const julienProducerId = await upsertProducer(
-      julienId,
-      "La Ferme du Verger",
-      "8 chemin des Vergers, Saint-Rémy",
-      "12345678900028",
+    const michelPId = await upsertProducer(
+      michelId,
+      "La Ferme",
+      "Crissey",
+      "11111111111112",
     );
 
-    const camilleProducerId = await upsertProducer(
-      camilleId,
-      "Fromagerie Camille",
-      "3 place de l'Église, Givry",
-      "12345678900035",
+    const karimPId = await upsertProducer(
+      karimId,
+      "Saveur de Bourgogne",
+      "Saint-Marcel",
+      "11111111111113",
     );
 
-    const nicolasProducerId = await upsertProducer(
+    const nicolasPId = await upsertProducer(
       nicolasId,
-      "Le Rucher de Bourgogne",
-      "21 route des Vignes, Mercurey",
-      "12345678900042",
+      "Les poules et compagnies",
+      "5 chemin de foussot, Ouroux",
+      "11111111111114",
     );
 
     const products = [
       [
-        romaneProducerId,
-        4,
-        "Œufs fermiers",
-        "Boîte de 6 œufs frais.",
-        3.5,
-        "boîte",
-        40,
-        "https://exemple.com/photo.jpg",
+        karimPId,
+        1,
+        "Baguette tradition",
+        "baguette tradition.",
+        1.2,
+        "unité",
+        30,
+        "/baguette.webp",
       ],
       [
-        romaneProducerId,
+        michelPId,
         3,
-        "Carottes",
+        "Carottes du potager",
         "Botte de carottes bio du jardin.",
         2.5,
         "botte",
         30,
-        "https://exemple.com/photo.jpg",
+        "/carottes.webp",
       ],
       [
-        romaneProducerId,
-        2,
-        "Bourgogne Rouge",
-        "Bouteille de vin rouge local.",
-        14,
-        "bouteille",
-        20,
-        "https://exemple.com/photo.jpg",
-      ],
-      [
-        romaneProducerId,
-        3,
-        "Pommes de terre",
-        "Sac de pommes de terre nouvelles.",
-        3,
-        "kg",
-        50,
-        "https://exemple.com/photo.jpg",
-      ],
-      [
-        julienProducerId,
-        5,
-        "Pommes Golden",
-        "Cageot de pommes Golden du verger.",
+        nicolasPId,
         4,
-        "kg",
-        60,
-        "https://exemple.com/photo.jpg",
+        "oeufs plein air",
+        "Boite d'oeuf local.",
+        3.3,
+        "douzaine",
+        20,
+        "/oeufs.webp",
       ],
       [
-        julienProducerId,
+        karimPId,
+        1,
+        "Pain au Levain",
+        "Pain traditionnel au levain.",
+        1.5,
+        "unité",
+        25,
+        "/pain-au-levain.webp",
+      ],
+      [
+        karimPId,
+        1,
+        "pain aux céréales",
+        "Pain traditionel au Céreales.",
+        2,
+        "unité",
+        20,
+        "/pain-aux-cereales.webp",
+      ],
+      [
+        karimPId,
+        1,
+        "pain d'épeautre",
+        "Pain traditionel a l'épautre.",
         5,
-        "Poires Williams",
-        "Poires fraîches cueillies à maturité.",
-        4.5,
-        "kg",
-        35,
-        "https://exemple.com/photo.jpg",
+        "500g",
+        30,
+        "/pain-d'epeautre.webp",
       ],
       [
-        julienProducerId,
+        karimPId,
         1,
         "Pain de campagne",
         "Miche de pain au levain naturel.",
@@ -210,7 +230,7 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        camilleProducerId,
+        nicolasPId,
         6,
         "Comté affiné 18 mois",
         "Fromage au lait cru affiné en cave.",
@@ -220,7 +240,7 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        camilleProducerId,
+        nicolasPId,
         6,
         "Chèvre frais",
         "Bûchette de fromage de chèvre fermier.",
@@ -230,7 +250,7 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        camilleProducerId,
+        nicolasPId,
         6,
         "Faisselle nature",
         "Pot de faisselle fraîche à la cuillère.",
@@ -240,7 +260,7 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        nicolasProducerId,
+        nicolasPId,
         7,
         "Miel de fleurs",
         "Pot de miel toutes fleurs de Bourgogne.",
@@ -250,7 +270,7 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        nicolasProducerId,
+        nicolasPId,
         7,
         "Miel d'acacia",
         "Miel doux et clair, récolte locale.",
@@ -260,12 +280,12 @@ const seed = async () => {
         "https://exemple.com/photo.jpg",
       ],
       [
-        nicolasProducerId,
-        7,
-        "Pain d'épices au miel",
-        "Pain d'épices artisanal au miel local.",
-        6,
-        "pièce",
+        isabellePId,
+        2,
+        "Rosée en folie",
+        "Rosée en folie vin de bonne fabrique.",
+        12,
+        "bouteille",
         18,
         "https://exemple.com/photo.jpg",
       ],
@@ -287,25 +307,25 @@ const seed = async () => {
        ($9, $10, $11, $12),
        ($13, $14, $15, $16)`,
       [
-        "Arrivée de TUNG TUNG TUNG SAHUR",
-        "67 rue du soixante-sept, Woippy",
-        "2067-10-15",
-        "Tung Tung Tung Sahur redescendra du paradis.",
+        "Vendanges ouvertes au Domaine",
+        "Domaine de la Côte Chalonnaise, Mercurey",
+        "2026-10-15",
+        "Venez découvrir les coulisses des vendanges avec Isabelle. Au programme : initiation à la récolte du chardonnay et dégustation du nouveau millésime.",
 
-        "Marché de producteurs",
-        "Place Saint-Vincent, Chalon-sur-Saône",
+        "Atelier Potager & Cueillette",
+        "La Ferme, Crissey",
         "2026-09-12",
-        "Marché mensuel regroupant les producteurs locaux du réseau SaôneLocal.",
+        "Michel vous ouvre ses portes pour un après-midi découverte. Apprenez à récolter vos propres carottes bio et repartez avec votre botte fraîche.",
 
-        "Dégustation fromages et vins",
-        "Fromagerie Camille, Givry",
+        "Secret du pain au levain avec Karim",
+        "Saveur de Bourgogne, Saint-Marcel",
         "2026-10-03",
-        "Soirée dégustation associant les fromages de Camille et les vins de la région.",
+        "Un atelier unique mené par Karim pour maîtriser la fabrication artisanale de la baguette tradition et la gestion du levain naturel.",
 
-        "Récolte du miel - portes ouvertes",
-        "Le Rucher de Bourgogne, Mercurey",
+        "Récolte de miel et soins du rucher",
+        "Les poules et compagnies, Ouroux",
         "2026-08-22",
-        "Visite du rucher et démonstration de récolte du miel par Nicolas.",
+        "Nicolas vous propose une immersion au cœur de ses ruches. Démonstration d'extraction de miel toutes fleurs et rencontre avec ses poules de plein air.",
       ],
     );
 

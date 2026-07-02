@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 exports.verifyAuth = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token =
-    (authHeader && authHeader.split(" ")[1]) || req.cookies?.accessToken;
+    (authHeader && authHeader.split(" ")[1]) || req.cookies.accessToken;
 
   if (!token) {
     return res
@@ -16,7 +16,7 @@ exports.verifyAuth = (req, res, next) => {
     req.user = verified;
     next();
   } catch (err) {
-    return res
+    res
       .status(403)
       .json({ success: false, error: "Token invalide ou expiré." });
   }

@@ -3,7 +3,8 @@ import Link from "next/link";
 
 interface ProductData {
   id: number;
-  name: string;
+  name?: string;
+  product_name?: string;
   price: number;
   unit: string;
   product_photo?: string;
@@ -39,7 +40,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <div className="bg-[#8B362E] rounded-xl p-2 flex flex-col justify-between gap-2 text-white">
         <div>
           <h3 className="text-xs font-bold leading-tight truncate">
-            {product.name}
+            {product.product_name || product.name}
           </h3>
           <p className="text-[10px] font-normal opacity-90 mt-0.5 truncate">
             {formattedPrice} ({product.unit})

@@ -24,7 +24,7 @@ export default function SuggestedProducts({ products }: SuggestedProductsProps) 
         Ça pourrait vous intéresser :
       </h2>
 
-      <div className="grid grid-cols-3 gap-2 w-full mt-8">
+      <div className="grid grid-cols-3 gap-2 w-full mt-8"> 
         {products.map((suggested) => (
           <ProductCard
             key={suggested.id}

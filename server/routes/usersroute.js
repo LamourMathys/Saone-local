@@ -12,4 +12,5 @@ router.post("/", verifyAuth,   userscontroller.createUser);
 router.put("/:id", verifyAuth,  uploadUserPhoto, userscontroller.updateUser);
 router.delete("/:id", verifyAuth,  userscontroller.deleteUser);
 
-module.exports = router;
+
+module.exports = router; 

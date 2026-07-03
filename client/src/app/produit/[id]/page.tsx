@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Open_Sans } from "next/font/google";
@@ -33,10 +33,12 @@ interface ProducerData {
 
 export default function ProductDetail() {
   const params = useParams();
+  const router = useRouter();
   const [product, setProduct] = useState<ProductData | null>(null);
   const [producer, setProducer] = useState<ProducerData | null>(null);
   const [suggestedProducts, setSuggestedProducts] = useState<any[]>([]);
   const [quantity, setQuantity] = useState(1);
+  const [addedMessage, setAddedMessage] = useState(false);
 
   useEffect(() => {
     if (!params?.id) return;
@@ -175,9 +177,52 @@ export default function ProductDetail() {
             <span className="text-[9px] font-semibold">En stock</span>
           </div>
 
-          <button className="bg-white text-[10px] font-medium py-1.5 px-4 rounded-lg active:scale-95 transition-transform w-fit mt-3">
-            → Ajouter au panier
-          </button>
+          <div className="flex items-center gap-3 mt-3">
+            <button
+              onClick={async () => {
+                try {
+                  const res = await fetch("/api/orders/cart", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      product_id: product.id,
+                      quantity: quantity,
+                    }),
+                  });
+                  
+                  if (res.status === 401 || res.status === 403) {
+                    router.push("/connexion");
+                    return;
+                  }
+
+                  const contentType = res.headers.get("content-type");
+                  if (contentType && contentType.includes("application/json")) {
+                    const resJson = await res.json();
+                    if (resJson.success) {
+                      setAddedMessage(true);
+                      setTimeout(() => setAddedMessage(false), 3500);
+                    } else {
+                      alert(`Erreur: ${resJson.error || "Impossible d'ajouter le produit."}`);
+                    }
+                  } else {
+                    alert(`Erreur serveur (${res.status}). Veuillez vérifier que le serveur backend a bien été redémarré.`);
+                  }
+                } catch (err) {
+                  console.error(err);
+                }
+              }}
+              className="bg-white text-[10px] font-medium py-1.5 px-4 rounded-lg active:scale-95 transition-transform w-fit cursor-pointer"
+            >
+              → Ajouter au panier
+            </button>
+            {addedMessage && (
+              <span className="text-[#9AA433] text-[10px] font-bold animate-pulse">
+                ajouté
+              </span>
+            )}
+          </div>
         </div>
       </div>
 

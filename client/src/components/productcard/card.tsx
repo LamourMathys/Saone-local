@@ -13,9 +13,10 @@ interface ProductData {
 
 interface ProductCardProps {
   product: ProductData;
+  onAddToCart?: (id: number) => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const formattedPrice = new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "EUR",
@@ -48,8 +49,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <button
-          onClick={(e) => e.preventDefault()}
-          className="w-full bg-white text-[#8B362E] font-medium text-[10px] py-1 rounded-lg active:scale-95 transition-transform text-center"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (onAddToCart) onAddToCart(product.id);
+          }}
+          className="w-full bg-white text-[#8B362E] font-medium text-[10px] py-1 rounded-lg active:scale-95 transition-transform text-center cursor-pointer"
         >
           Ajouter au panier
         </button>

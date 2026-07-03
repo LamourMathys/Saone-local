@@ -92,7 +92,7 @@ export default function Favoris() {
   };
 
   return (
-    <main className="w-full min-h-screen bg-[#FAF6F0] pb-28">
+    <main className="w-full max-w-[430px] mx-auto min-h-screen bg-[#FAF6F0] pb-28">
       <div className="pt-4 px-4 flex flex-col gap-4">
         <BoxandBouton
           text="vos favoris"

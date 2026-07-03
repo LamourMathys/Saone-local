@@ -22,6 +22,12 @@ router.get(
   verifyProducer,
   ordersController.getAllOrdersByProducer,
 );
+router.get("/cart", verifyAuth, ordersController.getCartItems);
+router.post("/cart", verifyAuth, ordersController.addToCart);
+router.put("/cart", verifyAuth, ordersController.updateCartItemQuantity);
+router.delete("/cart/:productId", verifyAuth, ordersController.removeCartItem);
+router.post("/cart/checkout", verifyAuth, ordersController.checkoutCart);
+
 router.get(
   "/:id",
   verifyAuth,

@@ -300,32 +300,36 @@ const seed = async () => {
     }
 
     await pool.query(
-      `INSERT INTO events (title, location, event_date, description)
+      `INSERT INTO events (title, location, event_date, description, event_photo)
        VALUES 
-       ($1, $2, $3, $4),
-       ($5, $6, $7, $8),
-       ($9, $10, $11, $12),
-       ($13, $14, $15, $16)`,
+       ($1, $2, $3, $4, $5),
+       ($6, $7, $8, $9, $10),
+       ($11, $12, $13, $14, $15),
+       ($16, $17, $18, $19, $20)`,
       [
-        "Vendanges ouvertes au Domaine",
-        "Domaine de la Côte Chalonnaise, Mercurey",
-        "2026-10-15",
-        "Venez découvrir les coulisses des vendanges avec Isabelle. Au programme : initiation à la récolte du chardonnay et dégustation du nouveau millésime.",
+        "Marché fermier sur la place de l'église",
+        "Sassenay",
+        "2026-06-05",
+        "Le marché se déroulera de 9h à 15h, avec des stands de produits frais et de dégustation, venez nous rencontrer !",
+        "/église sassenay.webp",
 
-        "Atelier Potager & Cueillette",
-        "La Ferme, Crissey",
-        "2026-09-12",
-        "Michel vous ouvre ses portes pour un après-midi découverte. Apprenez à récolter vos propres carottes bio et repartez avec votre botte fraîche.",
+        "Place de l'hôtel de ville",
+        "Chalon-sur-saône",
+        "2026-07-16",
+        "Le marché se déroulera de 8h à 12h, avec une animation autour du \"bien manger\" pour petits et grands !",
+        "/photo-calendrier.png",
 
-        "Secret du pain au levain avec Karim",
-        "Saveur de Bourgogne, Saint-Marcel",
-        "2026-10-03",
-        "Un atelier unique mené par Karim pour maîtriser la fabrication artisanale de la baguette tradition et la gestion du levain naturel.",
+        "Foire agricole",
+        "Ciel",
+        "2026-07-21",
+        "De 10 à 18h, venez découvrir nos produits et méthodes de productions à la foire de Ciel, à ne pas louper !",
+        "/carottes.webp",
 
-        "Récolte de miel et soins du rucher",
-        "Les poules et compagnies, Ouroux",
-        "2026-08-22",
-        "Nicolas vous propose une immersion au cœur de ses ruches. Démonstration d'extraction de miel toutes fleurs et rencontre avec ses poules de plein air.",
+        "Fête rurale",
+        "Mercurey",
+        "2026-08-01",
+        "A partir de 11h, venez danser sur la place du village et découvrir nos produits à consommer sur place ou à la maison !",
+        "/evenement-mercurey.webp",
       ],
     );
 

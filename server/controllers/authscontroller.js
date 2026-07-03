@@ -313,3 +313,21 @@ exports.logout = async (req, res) => {
     });
   }
 };
+
+exports.getMe = async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT id, first_name, last_name, email, role, description FROM users WHERE id = $1",
+      [req.user.userId]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, error: "Utilisateur non trouvé." });
+    }
+
+    res.json({ success: true, user: result.rows[0] });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Erreur serveur." });
+  }
+};

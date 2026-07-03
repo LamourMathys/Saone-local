@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Open_Sans } from "next/font/google";
 import BoxandBouton from "../../../components/boxandbouton-component/boxandbouton";
-import ProductCard from "../../../components/productcard/card";
+import SuggestedProducts from "../../../components/suggested-products/suggestion";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -180,30 +180,7 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {suggestedProducts.length > 0 && (
-        <section className="w-full flex flex-col gap-3 mt-4">
-          <h2 className="text-sm font-bold text-[#8B362E]">
-            Ça pourrait vous intéresser :
-          </h2>
-
-          <div className="grid grid-cols-3 gap-2 w-full mt-8">
-            {suggestedProducts.map((suggested) => (
-              <ProductCard
-                key={suggested.id}
-                product={{
-                  id: suggested.id,
-                  name: suggested.product_name,
-                  price: suggested.price,
-                  unit: suggested.unit,
-                  product_photo:
-                    suggested.product_photo || "/productplaceholder.png",
-                  producer_id: suggested.producer_id,
-                }}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      <SuggestedProducts products={suggestedProducts} />
     </main>
   );
 }

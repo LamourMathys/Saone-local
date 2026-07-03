@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, SyntheticEvent, useRef } from "react";
-import { useRouter } from "next/navigation";
+
 import ProfileHeader from "../../components/boxandbouton-component/boxandbouton";
 import { Baloo_2 } from "next/font/google";
 
@@ -14,7 +14,6 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://saone-local.webhop.me/api";
 
 export default function Connexion() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

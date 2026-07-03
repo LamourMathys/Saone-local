@@ -18,4 +18,7 @@ router.delete(
   authController.deleteUser,
 );
 
+router.get("/me", verifyAuth, authController.getMe);
+
 module.exports = router;
+

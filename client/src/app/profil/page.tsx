@@ -14,7 +14,6 @@ interface UserProfile {
   role: "client" | "producer" | "admin";
   description?: string;
   user_photo?: string;
-  photo?: string;
 }
 
 interface Order {
@@ -114,21 +113,12 @@ export default function ProfilPage() {
       console.error(err);
     }
   };
-
   const getImagePath = () => {
-    const photoSource = user?.user_photo || user?.photo;
+    if (!user?.user_photo) return "/placeholder.png";
+    if (user.user_photo.startsWith("http")) return user.user_photo;
 
-    if (!photoSource) return "/placeholder.png";
-    if (photoSource.startsWith("http")) return photoSource;
-
-    const normalizedPath = photoSource.startsWith("/") ? photoSource : `/${photoSource}`;
-
-    if (normalizedPath.startsWith("/saonelocal")) {
-      return normalizedPath;
-    }
-
-    const cleanName = normalizedPath.replace(/^\/+/, "");
-    return `/uploads/avatars/${cleanName}`;
+    const cleanPath = user.user_photo.replace(/^\/?(uploads\/avatars\/)?/, "");
+    return `/uploads/avatars/${cleanPath}`;
   };
 
   if (!user) return null;

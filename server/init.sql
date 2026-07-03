@@ -76,17 +76,18 @@ CREATE TABLE favorites (
 );
 
 CREATE TABLE events (
-  id          SERIAL PRIMARY KEY,
-  title       VARCHAR,
-  description VARCHAR,
-  location    VARCHAR,
-  event_date  TIMESTAMP,
-  event_photo   VARCHAR(100), /*a rajouter dans le mcd mld*/
-  creator_id  INTEGER REFERENCES users(id)
+  id            SERIAL PRIMARY KEY,
+  title         VARCHAR,
+  description   VARCHAR,
+  location      VARCHAR,
+  event_date    TIMESTAMP,
+  event_photo   VARCHAR(100),
+  creator_id    INTEGER REFERENCES users(id)
 );
 
 CREATE TABLE event_participants (
   id          SERIAL PRIMARY KEY,
+  user_id     INTEGER REFERENCES users(id),
   event_id    INTEGER REFERENCES events(id),
   role        VARCHAR
 );

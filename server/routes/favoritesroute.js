@@ -5,6 +5,7 @@ const favoritescontroller = require("../controllers/favoritescontroller");
 const { verifyAuth } = require("../verification/authverification");
 const { verifyAdmin } = require("../verification/adminverification");
 
+router.get("/my", verifyAuth, favoritescontroller.getMyFavorites);
 router.get("/", verifyAuth, verifyAdmin, favoritescontroller.getAllFavorites);
 router.get("/:id", verifyAuth, favoritescontroller.getFavoriteById);
 router.post("/", verifyAuth, favoritescontroller.createFavorite);

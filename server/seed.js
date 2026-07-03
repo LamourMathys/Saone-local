@@ -329,6 +329,32 @@ const seed = async () => {
       ],
     );
 
+    const theoId = await getUserId("theo@saonelocal.fr");
+    if (theoId) {
+      const baguetteResult = await pool.query("SELECT id FROM products WHERE product_name = $1", ["Baguette tradition"]);
+      if (baguetteResult.rows[0]) {
+        await pool.query(
+          "INSERT INTO favorites (user_id, product_id, producer_id) VALUES ($1, $2, $3)",
+          [theoId, baguetteResult.rows[0].id, null]
+        );
+      }
+      
+      const carottesResult = await pool.query("SELECT id FROM products WHERE product_name = $1", ["Carottes du potager"]);
+      if (carottesResult.rows[0]) {
+        await pool.query(
+          "INSERT INTO favorites (user_id, product_id, producer_id) VALUES ($1, $2, $3)",
+          [theoId, carottesResult.rows[0].id, null]
+        );
+      }
+
+      if (karimPId) {
+        await pool.query(
+          "INSERT INTO favorites (user_id, product_id, producer_id) VALUES ($1, $2, $3)",
+          [theoId, null, karimPId]
+        );
+      }
+    }
+
     console.log("Seeder exécuté avec succès !");
   } catch (error) {
     console.error("Erreur lors du seeding :", error);

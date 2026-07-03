@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Open_Sans } from "next/font/google";
 import ProfileHeader from "../../../components/boxandbouton-component/boxandbouton";
 import ProductCard from "../../../components/productcard/card";
+import FavoriteToggle from "../../../components/favorite-toggle/FavoriteToggle";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -92,7 +93,7 @@ export default function ProducerProfile() {
               <h1 className="text-xl font-bold text-[#8B362E]">
                 {producer.first_name} {producer.last_name}
               </h1>
-              <button className="text-2xl text-[#FACA92]">☆</button>
+              <FavoriteToggle producerId={producer.id} />
             </div>
 
             <p className="mt-0.5 text-xs font-bold text-[#9AA433]">

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { Open_Sans } from "next/font/google";
 import BoxandBouton from "../../../components/boxandbouton-component/boxandbouton";
 import SuggestedProducts from "../../../components/suggested-products/suggestion";
+import FavoriteToggle from "../../../components/favorite-toggle/FavoriteToggle";
 
 const openSans = Open_Sans({
   subsets: ["latin"],
@@ -138,7 +139,7 @@ export default function ProductDetail() {
             <h1 className="text-lg font-bold leading-tight">
               {product.product_name}
             </h1>
-            <button className="text-gray-400 text-lg shrink-0">☆</button>
+            <FavoriteToggle productId={product.id} />
           </div>
 
           <p className="text-[10px] opacity-90 leading-tight">

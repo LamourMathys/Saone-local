@@ -1,0 +1,58 @@
+Weekly n°10 23/06/2026 :
+sujets à préparer :
+soutenance 
+avancement partie progs pour la semaine prochaine
+
+Ce qui a été fait la semaine précédente :
+Marketing :
+rien 
+Programmation :
+commencé le front end 
+continué le back-end ( dans les dernières étapes)
+
+ensemble: 
+roadmap commencée côté programmation
+
+
+À modifier :
+Marketing :
+rien
+Programmation :
+rien
+
+À rajouter :
+Marketing :
+rajouter pictos nav bar mais versions vertes
+Programmation :
+bouton logo SaôneLocal pour revenir à l’accueil
+
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+rien
+
+objectifs globaux : 
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+rajouter pictos nav bar mais versions vertes
+roadmap
+Programmation :
+finir le back end
+bien continuer le front end (page d’accueil, menu burger, mentions légales, bar de recherche, catalogue...)
+Ensemble :
+continuer la roadmap
+continuer à préparer la soutenance
+

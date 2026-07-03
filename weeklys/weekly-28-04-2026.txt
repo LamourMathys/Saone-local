@@ -1,1 +1,63 @@
-Weekly n°1 28/04/2026:
+Weekly n°2 28/04/2026 :
+
+Ce qui a été fait la semaine précédente :
+Marketing :
+Charte graphique finie + présentation
+Maquette haute fidélité avancée 
+dossier de préparation à l’intégration pour les programmeurs 
+google drive mit en place pour les livrables marketing
+Bases du design system commencé
+Programmation :
+Repo GitHub initialisé
+11 user stories actuellement
+Toutes dans les “To do”
+Triées en : Must have / Should have / Nice to have
+Sous forme de : “En tant que [], je veux que [], afin que []”
+MLD commencé (en avance)
+Tests automatisés fonctionnels pour vérifier qu’il y a bien les weeklys et les fichiers .txt
+
+À rajouter :
+Marketing :
+Popup pour valider la suppression d’article en tant que producteur
+finir de compléter le dossier des bases du design system
+Programmation :
+Rien
+
+À modifier :
+Marketing :
+Dans le panier, lorsqu’il reste 1 article, faire apparaître la poubelle de suppression
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+Rien
+
+Idées / choses / remarques bonus :
+Marketing :
+Arborescence à faire pour aujourd’hui (28/04/2026)
+Programmation :
+Rien
+
+objectifs globaux : 
+29 avril: data modeling
+7 mai : envoyer livrables data modeling (mdc + mld) 
+11 mai : déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+finir les derniers détails de la maquette haute fidélité
+finir de compléter le dossier de bases design system
+Programmation :
+à partir du 29/04/2026 : Continuer le MCD et MLD pour le 07/04/2026 ( Aucun dev back-end sans feu vert de l'encadrant.)
+
+Ensemble :
+finir les users stories pour le 28/04/2026
+

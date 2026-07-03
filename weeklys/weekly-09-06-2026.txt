@@ -1,0 +1,51 @@
+Weekly n°8 09/06/2026 :
+Ce qui a été fait la semaine précédente :
+Marketing :
+l’historique de toutes les commandes que le producteur a faite et  celles à faire
+Programmation :
+contrôleurs et routes
+authentification
+user stories du back-end à remettre dans l’ordre
+
+À rajouter :
+Marketing :
+page de demande à l admin depuis le profil client pour être aussi producteur 
+page ou le producteur marque ce qui est indisponible et peut decocher pour remettre les produits de saison par exemple
+Programmation :
+finir user stories du back-end à remettre dans l’ordre pour ce soir
+
+À modifier :
+Marketing :
+rien
+Programmation :
+user stories du back-end à remettre dans l’ordre pour ce soir
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+rien
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+users stories à rajouter en masse
+
+objectifs globaux : 
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+page de demande à l admin depuis le profil client pour être aussi producteur 
+page ou le producteur marque ce qui est indisponible et peut décocher pour remettre les produits de saison par exemple
+Programmation :
+finir user stories du back-end à remettre dans l’ordre pour ce soir
+finaliser le déploiement pour le 15 juin
+Ensemble :
+rien
+

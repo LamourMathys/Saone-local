@@ -1,0 +1,55 @@
+Weekly n°3 05/05/2026 :
+Ce qui a été fait la semaine précédente :
+Marketing :
+rien
+Programmation :
+mcd entamé  : 
+prototype du mld / base de donnée pour organiser les informations dans la base de donnée
+configuration de l’environnement commencé et presque fini : côté serveur presque terminé
+réorganisation des users stories et colonnes pour dire ce qui n’est pas encore complètement écrit et pour se repérer plus facilement
+
+À rajouter :
+Marketing :
+Popup pour valider la suppression d’article en tant que producteur
+finir de compléter le dossier des bases du design system
+Programmation :
+Rien
+
+À modifier :
+Marketing :
+version cliquée de l’image/produit à modifier, où mettre l’image dans formulaire d’ajout de produit, rajouter flèche depuis paiement jusqu’à catalogue dans l’arborescence
+Programmation :
+rien
+
+Problèmes :
+Marketing :
+Rien
+Programmation :
+rien
+ensemble:
+user story de modification de produit pas claire par rapport à la maquette
+
+Idées / choses / remarques bonus :
+Marketing :
+rien
+Programmation :
+Rien
+
+objectifs globaux : 
+7 mai : envoyer livrables data modeling (mdc + mld) 
+11 mai : déploiement 
+12 mai : monthly avec staff
+13 mai : back-end + bdd
+9 juin : monthly avec staff
+15 juin: front-end
+3 juillet : fin du projet (soutenance plus tard)
+
+Tâches de la semaine prochaine :
+Marketing :
+version cliquée de l’image/produit à modifier, où mettre l’image dans formulaire d’ajout de produit, rajouter flèche depuis paiement jusqu’à catalogue dans l’arborescence
+Programmation :
+finir le MCD et MLD pour le 07/04/2026 au maximum
+
+Ensemble :
+rien
+

@@ -1,0 +1,84 @@
+Table users {
+  id            integer     [primary key, increment]
+  first_name    varchar
+  last_name     varchar
+  email         varchar     [unique, not null]
+  password      varchar     [note: 'bcrypt, NULL si OAuth']
+  role          varchar     [note: 'client, producteur, admin']
+  provider      varchar     [note: 'local, google, facebook']
+  provider_id   varchar     [note: 'NULL si local']
+  user_photo    varchar
+  created_at    timestamp
+  last_login    timestamp
+}
+
+Table producers {
+  id              integer   [primary key, increment]
+  user_id        integer [unique, not null]
+  producer_name   varchar
+  description     varchar
+  producer_photo  varchar
+  shop_location   varchar
+  created_at      timestamp
+}
+
+Table categories {
+  id    integer [primary key, increment]
+  name  varchar [unique]
+}
+
+Table products {
+  id            integer   [primary key, increment]
+  producer_id   integer
+  category_id   integer
+  product_name  varchar
+  description   varchar
+  price         decimal
+  unit          varchar
+  stock         integer
+  product_photo varchar
+  created_at    timestamp
+}
+
+Table orders {
+  id          integer   [primary key, increment]
+  user_id     integer
+  producer_id integer
+  status      varchar   [note: 'nouvelle, en_preparation, prete, retiree']
+  total_price decimal
+  created_at  timestamp
+}
+
+Table order_items {
+  id          integer [primary key, increment]
+  order_id    integer
+  product_id  integer
+  quantity    integer
+  unit_price  decimal
+}
+
+Table favorites {
+  id          integer [primary key, increment]
+  user_id     integer
+  product_id  integer [null]
+  producer_id integer [null]
+}
+
+Table events {
+  id          integer [primary key, increment]
+  title       varchar
+  location    varchar
+  event_date  timestamp
+  description varchar
+}
+
+Ref: users.id < producers.user_id
+Ref: producers.id < products.producer_id
+Ref: categories.id < products.category_id
+Ref: users.id < orders.user_id
+Ref: producers.id < orders.producer_id
+Ref: orders.id < order_items.order_id
+Ref: products.id < order_items.product_id
+Ref: users.id < favorites.user_id
+Ref: products.id < favorites.product_id
+Ref: producers.id < favorites.producer_id

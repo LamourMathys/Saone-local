@@ -7,12 +7,81 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Vérifier le README
         run: test -f readme.md
-
       - name: Vérifier les .txt
         run: find ./weeklys -name "*.txt" | grep .
-
-      - name: Vérifier si il y a des fichiers dans le dossier "Livrables"
+      - name: Vérifier les Livrables
         run: find ./Livrables -type f | grep .
+
+  build-and-push:
+    name: Build & Push Docker images
+    runs-on: ubuntu-latest
+    needs: check-files
+    permissions:
+      packages: write
+    steps:
+      - uses: actions/checkout@v3
+      - name: Login ghcr.io
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Build & Push API
+        run: |
+          docker build --target backend -t ghcr.io/lamourmathys/saone-local:api .
+          docker push ghcr.io/lamourmathys/saone-local:api
+      - name: Build & Push App
+        run: |
+          docker build --target frontend \
+            --build-arg NEXT_PUBLIC_API_URL=https://saone-local.webhop.me/api \
+            -t ghcr.io/lamourmathys/saone-local:app .
+          docker push ghcr.io/lamourmathys/saone-local:app
+
+  deploy-to-ec2:
+    name: Deploy to EC2
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/front-end')
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Copier fichiers sur EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSHKEY }}
+          source: "docker-compose.yml,server/init.sql,nginx.conf"
+          target: /home/${{ secrets.EC2_USERNAME }}/saone-local/
+
+      - name: Déploiement via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSHKEY }}
+          script: |
+            mkdir -p /home/${{ secrets.EC2_USERNAME }}/saone-local/server
+
+            cat > /home/${{ secrets.EC2_USERNAME }}/saone-local/server/.env << 'EOF'
+            DB_USER=saone
+            DB_NAME=saone
+            DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET="${{ secrets.JWT_SECRET }}"
+            JWT_REFRESH_SECRET="${{ secrets.JWT_REFRESH_SECRET }}"
+            PORT=${{ secrets.PORT }}
+            NODE_ENV=production
+            EOF
+
+            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            cd /home/${{ secrets.EC2_USERNAME }}/saone-local/
+
+            sudo docker compose --env-file server/.env down --volumes --remove-orphans || true
+            sudo docker compose --env-file server/.env pull
+            sudo docker compose --env-file server/.env up -d
+
+            until sudo docker compose --env-file server/.env exec -T db pg_isready -U saone; do sleep 3; done
+            sudo docker compose --env-file server/.env exec -T db psql -U saone -d saone -f /docker-entrypoint-initdb.d/init.sql
+            sudo docker compose --env-file server/.env restart api
+            until sudo docker compose --env-file server/.env exec -T api wget -q -O- http://localhost:3000/api/health; do sleep 3; done
+
+            sudo docker compose --env-file server/.env exec -T api npm run seed

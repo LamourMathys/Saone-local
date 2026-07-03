@@ -40,6 +40,14 @@ export default function Contact() {
             placeholder="message :"
             className="col-span-2 h-20 border border-[#FACA92] bg-white rounded-md p-2 w-full"
           ></textarea>
+          <div className="col-span-2 flex justify-center mt-6">
+            <button
+              type="submit"
+              className="col-span-2 h-20 border border-[#FACA92] bg-white rounded-md p-1 w-2/3"
+            >
+              Envoyer
+            </button>
+          </div>
         </form>
       </div>
     </main>

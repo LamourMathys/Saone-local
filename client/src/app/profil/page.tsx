@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import BoxandBouton from "../../components/boxandbouton-component/boxandbouton";
 import SuggestedProducts from "../../components/suggested-products/suggestion";
 import Image from "next/image";
@@ -44,134 +44,214 @@ export default function ProfilPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [suggestions, setSuggestions] = useState<DBProduct[]>([]);
   const [catalogue, setCatalogue] = useState<DBProduct[]>([]);
-  const [loading, setLoading] = useState(true);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const router = useRouter();
 
   useEffect(() => {
     async function loadProfileAndData() {
       try {
-        const profileRes = await fetch("/api/auth/me", {
-          method: "GET",
-          credentials: "include", 
-        });
-
-        if (!profileRes.ok) {
-          router.push("/connexion");
-          return;
-        }
+        const profileRes = await fetch("/api/auth/me", { method: "GET", credentials: "include" });
+        if (!profileRes.ok) return router.push("/connexion");
 
         const profileData = await profileRes.json();
-        if (!profileData.success) {
-          router.push("/connexion");
-          return;
-        }
+        if (!profileData.success) return router.push("/connexion");
 
         const currentUser = profileData.user;
         setUser(currentUser);
+        setEditFirstName(currentUser.first_name || "");
+        setEditLastName(currentUser.last_name || "");
+        setEditDescription(currentUser.description || "");
+
+        const productsRes = await fetch("/api/products");
+        const productsData = await productsRes.json();
+        const rawProducts = Array.isArray(productsData.products) ? productsData.products : Array.isArray(productsData) ? productsData : [];
 
         if (currentUser.role === "producer") {
           const ordersRes = await fetch("/api/orders/producer", { credentials: "include" });
           const ordersData = await ordersRes.json();
           if (ordersData.success) setOrders(ordersData.orders || []);
-
-          const productsRes = await fetch("/api/products");
-          const productsData = await productsRes.json();
-          
-          const rawProducts = Array.isArray(productsData.products)
-            ? productsData.products
-            : Array.isArray(productsData)
-            ? productsData
-            : [];
-
           setCatalogue(rawProducts.filter((p: DBProduct) => String(p.producer_id) === String(currentUser.id)));
         } else {
           const ordersRes = await fetch("/api/orders/user", { credentials: "include" });
           const ordersData = await ordersRes.json();
           if (ordersData.success) setOrders(ordersData.orders || []);
-
-          const productsRes = await fetch("/api/products");
-          const productsData = await productsRes.json();
-          
-          const rawProducts = Array.isArray(productsData.products)
-            ? productsData.products
-            : Array.isArray(productsData)
-            ? productsData
-            : [];
-
           setSuggestions(rawProducts.slice(0, 3));
         }
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     }
-
     loadProfileAndData();
   }, [router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FAF6EE]">
-        <p className="text-[#6F4444] animate-pulse font-medium">Chargement...</p>
-      </div>
-    );
-  }
+  const handleSaveChanges = async () => {
+    if (!user) return;
+    try {
+      const formData = new FormData();
+      formData.append("first_name", editFirstName);
+      formData.append("last_name", editLastName);
+      formData.append("description", editDescription);
+      if (selectedFile) formData.append("user_photo", selectedFile);
+
+      const res = await fetch(`/api/users/${user.id}`, { method: "PUT", body: formData });
+      const json = await res.json();
+      if (json.success && json.data) {
+        setUser(json.data);
+        setIsEditing(false);
+        setSelectedFile(null);
+      } else {
+        alert(json.error || "Une erreur est survenue.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  const getImagePath = () => {
+    if (!user?.user_photo) return "/placeholder.png";
+    if (user.user_photo.startsWith("http")) return user.user_photo;
+
+    const cleanPath = user.user_photo.replace(/^\/?(uploads\/avatars\/)?/, "");
+    return `/uploads/avatars/${cleanPath}`;
+  };
 
   if (!user) return null;
 
   const isProducer = user.role === "producer";
-
   const activeOrders = orders.filter(o => o.status !== "terminée" && o.status !== "livrée");
   const pastOrders = orders.filter(o => o.status === "terminée" || o.status === "livrée");
 
   return (
-    <main className="min-h-screen bg-[#FAF6EE] text-[#6F4444] p-4 pb-28">
-      <BoxandBouton
-        text="votre profil"
-        boxColor="bg-[#FACA92]"
-        buttonColor="bg-[#FACA92]"
-      />
+    <main className="min-h-screen bg-[#FAF6EE] text-[#714143] p-4 pb-24">
+      <BoxandBouton text="votre profil" boxColor="bg-[#FACA92]" buttonColor="bg-[#FACA92]" />
 
-      <div className="flex gap-4 items-start mt-6 mb-6">
-        <div className="relative w-28 h-28 rounded-2xl overflow-hidden shadow-sm shrink-0 bg-stone-200 border border-stone-300">
-          <Image
-            src={user.user_photo || "/placeholder.png"} 
-            alt="Profil"
-            fill
-            className="object-cover"
-          />
-        </div>
-        <div className="flex flex-col flex-1">
-          <h2 className="text-2xl font-bold">
-            {user.first_name} {user.last_name}
-          </h2>
-          <p className="text-xs text-stone-600 mt-1 leading-relaxed italic">
-            {user.description || (isProducer ? "Producteur Saône Local." : "Client Saône Local.")}
-          </p>
-          <button className="bg-white border text-xs px-3 py-1 rounded-lg w-max mt-3 hover:bg-stone-50 active:scale-95 transition-transform">
-            modifier
+      {isEditing ? (
+        <div className="bg-white rounded-2xl p-4 mt-4 mb-4 flex flex-col gap-4 border border-[#FACA92]/30">
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-sm text-[#714143]">Modifier votre profil :</h3>
+            <button 
+              onClick={() => {
+                setIsEditing(false);
+                setSelectedFile(null);
+                setEditFirstName(user.first_name || "");
+                setEditLastName(user.last_name || "");
+                setEditDescription(user.description || "");
+              }}
+              className="text-xs text-stone-400 underline"
+            >
+              annuler
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-3">
+              <div className="border border-[#FACA92] rounded-xl p-2.5 bg-white flex flex-col gap-1.5">
+                <span className="text-[10px] font-bold text-[#FACA92] uppercase">nom :</span>
+                <input 
+                  type="text" 
+                  value={editFirstName} 
+                  onChange={(e) => setEditFirstName(e.target.value)} 
+                  className="text-xs font-bold text-[#714143] bg-stone-50 p-1.5 rounded outline-none w-full"
+                  placeholder="Prénom"
+                />
+                <input 
+                  type="text" 
+                  value={editLastName} 
+                  onChange={(e) => setEditLastName(e.target.value)} 
+                  className="text-xs font-bold text-[#714143] bg-stone-50 p-1.5 rounded outline-none w-full"
+                  placeholder="Nom"
+                />
+              </div>
+
+              <div className="border border-[#FACA92] rounded-xl p-2.5 bg-white flex flex-col items-center justify-center gap-2">
+                <span className="text-[10px] font-bold text-[#FACA92] uppercase self-start">image :</span>
+                <button 
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="bg-[#FACA92] text-white text-[10px] font-bold py-2 px-2 rounded-lg w-full text-center"
+                >
+                  {selectedFile ? "sélectionnée" : "ajouter"}
+                </button>
+                <input 
+                  type="file" 
+                  ref={fileInputRef} 
+                  className="hidden" 
+                  accept="image/*"
+                  onChange={(e) => e.target.files?.[0] && setSelectedFile(e.target.files[0])}
+                />
+              </div>
+            </div>
+
+            <div className="border border-[#FACA92] rounded-xl p-2.5 bg-white flex flex-col">
+              <span className="text-[10px] font-bold text-[#FACA92] uppercase mb-1">description :</span>
+              <textarea 
+                value={editDescription} 
+                onChange={(e) => setEditDescription(e.target.value)} 
+                className="text-xs text-[#714143] bg-transparent outline-none resize-none flex-1 w-full leading-relaxed"
+                placeholder="Votre description..."
+              />
+            </div>
+          </div>
+
+          <button 
+            onClick={handleSaveChanges}
+            className="border-2 border-[#FACA92] bg-white text-[#714143] text-xs font-bold py-2 px-8 rounded-xl mx-auto"
+          >
+            continuer
           </button>
         </div>
-      </div>
+      ) : (
+        <div className="flex gap-4 items-center mt-4 mb-4">
+          <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 bg-stone-200">
+            <Image
+              src={getImagePath()} 
+              alt="Profil"
+              fill
+              unoptimized
+              priority
+              className="object-cover"
+            />
+          </div>
 
-      <div className="bg-[#9AA03A] text-white rounded-2xl p-4 mb-4 shadow-sm">
-        <h3 className="font-bold text-lg mb-2">Commandes :</h3>
-        <div className="flex flex-col gap-2 text-sm font-medium">
+          <div className="flex flex-col flex-1 min-w-0">
+            <h2 className="text-xl font-bold text-[#714143] truncate">
+              {user.first_name} {user.last_name}
+            </h2>
+            <p className="text-xs text-[#714143] opacity-80 line-clamp-2 italic mt-0.5">
+              {user.description || (isProducer ? "Producteur Saône Local." : "Client Saône Local.")}
+            </p>
+            <button 
+              onClick={() => setIsEditing(true)}
+              className="text-[11px] text-[#714143] underline font-medium mt-1 self-start"
+            >
+              modifier
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="bg-[#9AA433] text-white rounded-xl p-4 mb-4">
+        <h3 className="font-bold text-base mb-2">Commandes :</h3>
+        <div className="flex flex-col gap-2 text-xs">
           {(isProducer ? orders : activeOrders).length === 0 ? (
-            <p className="text-xs opacity-90 italic">Aucune commande en cours.</p>
+            <p className="italic opacity-80">Aucune commande en cours.</p>
           ) : (
             (isProducer ? orders : activeOrders).map((order) => (
-              <div key={order.id} className="flex justify-between border-b border-white/10 pb-1 last:border-0">
-                <span>n° {order.id}</span>
-                <span>
+              <div key={order.id} className="flex justify-between items-center border-b border-white/10 pb-1 last:border-0">
+                <span className="font-bold">n° {order.id}</span>
+                <span className="truncate max-w-30">
                   {isProducer 
                     ? `${order.client_first_name || "Client"} ${order.client_last_name || ""}` 
                     : new Date(order.created_at).toLocaleDateString("fr-FR")
                   }
                 </span>
-                <span className="bg-white/20 px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider">
+                <span className="bg-white/20 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase">
                   {order.status}
                 </span>
               </div>
@@ -182,11 +262,11 @@ export default function ProfilPage() {
 
       {!isProducer ? (
         <>
-          <div className="bg-[#6F4444] text-white rounded-2xl p-4 mb-6 shadow-sm">
-            <h3 className="font-bold text-lg mb-2">Votre historique :</h3>
-            <div className="flex flex-col gap-2 text-sm opacity-90">
+          <div className="bg-[#8B362E] text-white rounded-xl p-4 mb-4">
+            <h3 className="font-bold text-base mb-2">Votre historique :</h3>
+            <div className="flex flex-col gap-2 text-xs">
               {pastOrders.length === 0 ? (
-                <p className="text-xs italic opacity-80">Votre historique d&lsquo;achats est vide.</p>
+                <p className="italic opacity-80">Votre historique d&#39;achats est vide.</p>
               ) : (
                 pastOrders.map((o) => (
                   <div key={o.id} className="flex justify-between">
@@ -201,34 +281,33 @@ export default function ProfilPage() {
           <SuggestedProducts products={suggestions} />
         </>
       ) : (
-        <>
-          <div className="flex justify-between items-center mb-3 mt-6">
-            <h4 className="font-bold text-xl">Votre catalogue :</h4>
-            <button className="bg-[#FACA92] text-white w-6 h-6 rounded-lg flex items-center justify-center font-bold text-xs shadow-sm">➔</button>
+        <div className="mt-4">
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="font-bold text-lg text-[#714143]">Votre catalogue :</h4>
           </div>
           
           {catalogue.length === 0 ? (
-            <p className="text-sm italic text-stone-500">Aucun produit en vente.</p>
+            <p className="text-xs italic text-[#714143] opacity-70">Aucun produit en vente.</p>
           ) : (
             <div className="grid grid-cols-3 gap-2">
               {catalogue.map((prod) => (
                 <div key={prod.id} className="flex flex-col gap-1 items-center">
-                  <div className="relative w-full h-24 rounded-2xl overflow-hidden shadow-sm border bg-white">
+                  <div className="relative w-full h-20 rounded-xl overflow-hidden bg-white border">
                     <Image 
-                      src={prod.product_photo || "/productplaceholder.png"} 
+                      src={prod.product_photo ? (prod.product_photo.startsWith("http") ? prod.product_photo : `/uploads/${prod.product_photo}`) : "/productplaceholder.png"} 
                       alt={prod.product_name} 
                       fill 
                       className="object-cover" 
                     />
                   </div>
-                  <span className="text-[10px] text-center font-bold bg-white px-2 py-0.5 rounded-full shadow-xs border line-clamp-1 w-full">
+                  <span className="text-[10px] text-center font-bold truncate w-full px-0.5 text-[#714143]">
                     {prod.product_name}
                   </span>
                 </div>
               ))}
             </div>
           )}
-        </>
+        </div>
       )}
 
       <button 
@@ -236,7 +315,7 @@ export default function ProfilPage() {
           await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
           router.push("/connexion");
         }}
-        className="mt-12 text-xs text-red-400 underline block mx-auto hover:text-red-600 transition-colors"
+        className="mt-10 text-xs text-red-500 underline block mx-auto hover:text-red-600 transition-colors"
       >
         Se déconnecter de la session
       </button>

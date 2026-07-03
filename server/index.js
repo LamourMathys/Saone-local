@@ -14,6 +14,7 @@ const orderitemsRoutes = require("./routes/orderitemsroute");
 const favoritesRoutes = require("./routes/favoritesroute");
 const eventparticipantsRoutes = require("./routes/eventparticipantsroute");
 const refreshRoutes = require("./routes/refresh");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,8 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
+
+app.use("/uploads", express.static("uploads"));
 
 app.get("/api/health", (req, res) => {
   res.json({ message: "Serveur opérationnel" });

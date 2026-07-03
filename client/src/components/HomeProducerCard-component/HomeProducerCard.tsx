@@ -24,39 +24,35 @@ export default function HomeProducerCard({
   lastname,
   photoUrl,
 }: ProducersCardProps) {
+  
+  const getImagePath = () => {
+    if (!photoUrl) return "/placeholder.png";
+    
+    if (photoUrl.startsWith("http")) return photoUrl;
+
+    const cleanPath = photoUrl.replace(/^\/?(uploads\/avatars\/)?/, "");
+    
+    return `/uploads/avatars/${cleanPath}`;
+  };
+
   return (
-    <Link
-      href={`/producteur/${id}`}
-      style={{ display: "flex", flexDirection: "column", gap: "4px" }}
-    >
-      <div
-        style={{
-          width: "100%",
-          height: "135px",
-          borderRadius: "24px",
-          overflow: "hidden",
-          position: "relative",
-        }}
-      >
+    <Link href={`/producteur/${id}`} className="flex flex-col gap-1 w-full">
+      <div className="w-full h-33.75   rounded-3xl overflow-hidden relative border border-[#FACA92]/20">
         <Image
-          src={photoUrl || "/placeholder.png"}
+          src={getImagePath()}
           alt={name || "Producteur"}
           fill
           unoptimized
           priority
-          style={{ objectFit: "cover" }}
+          className="object-cover"
         />
       </div>
 
-      <h2
-        className={`${openSans.className} m-0 text-[8px] font-normal text-[#714143] text-center`}
-      >
+      <h2 className={`${openSans.className} m-0 text-[8px] font-normal text-[#714143] text-center`}>
         {firstname} {lastname}
       </h2>
 
-      <p
-        className={`${openSans.className} m-0 font-normal text-[8px] text-[#714143] text-center`}
-      >
+      <p className={`${openSans.className} m-0 font-normal text-[8px] text-[#714143] text-center`}>
         {name}
       </p>
     </Link>

@@ -227,7 +227,7 @@ const seed = async () => {
         4,
         "pièce",
         15,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         nicolasPId,
@@ -237,7 +237,7 @@ const seed = async () => {
         22,
         "kg",
         12,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         nicolasPId,
@@ -247,7 +247,7 @@ const seed = async () => {
         5.5,
         "pièce",
         25,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         nicolasPId,
@@ -257,7 +257,7 @@ const seed = async () => {
         2.8,
         "pièce",
         30,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         nicolasPId,
@@ -267,7 +267,7 @@ const seed = async () => {
         7,
         "pot",
         40,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         nicolasPId,
@@ -277,7 +277,7 @@ const seed = async () => {
         8,
         "pot",
         28,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
       [
         isabellePId,
@@ -287,7 +287,7 @@ const seed = async () => {
         12,
         "bouteille",
         18,
-        "https://exemple.com/photo.jpg",
+        null,
       ],
     ];
 

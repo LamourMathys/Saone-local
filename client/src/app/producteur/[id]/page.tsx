@@ -58,6 +58,14 @@ export default function ProducerProfile() {
     (product) => product.producer_id === Number(params.id),
   );
 
+  const getImagePath = () => {
+    if (!producer?.user_photo) return "/placeholder.png";
+    if (producer.user_photo.startsWith("http")) return producer.user_photo;
+
+    const cleanPath = producer.user_photo.replace(/^\/?(uploads\/avatars\/)?/, "");
+    return `/uploads/avatars/${cleanPath}`;
+  };
+
   return (
     <div className={`${openSans.className} w-full text-[#714143] px-4 pt-4`}>
       <ProfileHeader
@@ -70,7 +78,7 @@ export default function ProducerProfile() {
         <section className="flex gap-4 items-start mb-4">
           <div className="w-28 h-28 rounded-3xl overflow-hidden relative shrink-0">
             <Image
-              src={producer.user_photo || "/placeholder.png"}
+              src={getImagePath()}
               alt={`${producer.first_name} ${producer.last_name}`}
               fill
               unoptimized

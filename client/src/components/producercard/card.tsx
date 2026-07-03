@@ -15,6 +15,14 @@ interface ProducerCardProps {
 export default function ProducerCard({ producer }: ProducerCardProps) {
   const fullName = `${producer.first_name} ${producer.last_name}`;
 
+  const getImagePath = () => {
+    if (!producer.user_photo) return "/placeholder.png";
+    if (producer.user_photo.startsWith("http")) return producer.user_photo;
+
+    const cleanPath = producer.user_photo.replace(/^\/?(uploads\/avatars\/)?/, "");
+    return `/uploads/avatars/${cleanPath}`;
+  };
+
   return (
     <Link
       href={`/producteur/${producer.id}`}
@@ -22,7 +30,7 @@ export default function ProducerCard({ producer }: ProducerCardProps) {
     >
       <div className="w-full aspect-square rounded-xl overflow-hidden relative shrink-0">
         <Image
-          src={producer.user_photo || "/placeholder.png"}
+          src={getImagePath()}
           alt={fullName}
           fill
           unoptimized

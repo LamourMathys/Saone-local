@@ -42,15 +42,15 @@ exports.createUser = async (req, res) => {
     role,
     provider,
     provider_id,
-    user_photo,
     description,
   } = req.body;
+  
   try {
     const hashedPassword = password ? await bcrypt.hash(password, 10) : null;
 
     const [user] = (
       await pool.query(
-        "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo, description) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at",
+        "INSERT INTO users (first_name, last_name, email, password, role, provider, provider_id, user_photo, description) VALUES ($1, $2, $3, $4, $5, $6, $7, null, $8) RETURNING id, first_name, last_name, email, role, provider, provider_id, user_photo, description, created_at",
         [
           first_name,
           last_name,
@@ -59,7 +59,6 @@ exports.createUser = async (req, res) => {
           role,
           provider,
           provider_id,
-          user_photo,
           description,
         ],
       )
@@ -74,7 +73,19 @@ exports.updateUser = async (req, res) => {
   const { id } = req.params;
   const updates = { ...req.body };
   const currentUser = req.user;
+  
   const isAdmin = currentUser?.role === "admin";
+  const currentUserId = currentUser?.userId || currentUser?.id;
+
+  if (!isAdmin && String(id) !== String(currentUserId)) {
+    return res
+      .status(403)
+      .json({ success: false, error: "Accès refusé. Vous ne pouvez modifier que votre propre profil." });
+  }
+
+  if (req.file) {
+    updates.user_photo = req.file.filename;
+  }
 
   try {
     if (updates.email) {
@@ -125,6 +136,7 @@ exports.updateUser = async (req, res) => {
 
     res.status(200).json({ success: true, data: user });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ success: false, error: "Une erreur est survenue" });
   }
 };

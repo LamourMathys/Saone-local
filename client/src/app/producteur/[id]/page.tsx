@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Open_Sans } from "next/font/google";
 import ProfileHeader from "../../../components/boxandbouton-component/boxandbouton";
@@ -34,8 +34,42 @@ interface ProductData {
 
 export default function ProducerProfile() {
   const params = useParams();
+  const router = useRouter();
   const [producer, setProducer] = useState<ProducerData | null>(null);
   const [products, setProducts] = useState<ProductData[]>([]);
+
+  const handleAddToCart = async (productId: number) => {
+    try {
+      const res = await fetch("/api/orders/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          quantity: 1,
+        }),
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        router.push("/connexion");
+        return;
+      }
+
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const resJson = await res.json();
+        if (resJson.success) {
+        } else {
+          alert(`Erreur: ${resJson.error || "Impossible d'ajouter le produit."}`);
+        }
+      } else {
+        alert(`Erreur serveur (${res.status}). Veuillez vérifier que le serveur backend a bien été redémarré.`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (!params.id) return;
@@ -111,7 +145,11 @@ export default function ProducerProfile() {
       </h2>
       <div className="grid grid-cols-3 gap-2 justify-items-center w-full px-2 pt-8">
         {filteredProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard
+            key={product.id}
+            product={product}
+            onAddToCart={handleAddToCart}
+          />
         ))}
       </div>
     </div>

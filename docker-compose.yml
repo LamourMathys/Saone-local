@@ -13,6 +13,8 @@ services:
     image: ghcr.io/lamourmathys/saone-local:api
     env_file:
       - ./server/.env
+    volumes:
+      - shared_uploads:/app/uploads
     depends_on:
       - db
 
@@ -21,6 +23,8 @@ services:
     environment:
       - API_URL=http://api:3000
       - PORT=3001
+    volumes:
+      - shared_uploads:/app/public/uploads
     depends_on:
       - api
 
@@ -32,9 +36,11 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - shared_uploads:/var/www/uploads:ro
     depends_on:
       - app
       - api
 
 volumes:
   postgres_data:
+  shared_uploads:

@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import BoxandBouton from "../../components/boxandbouton-component/boxandbouton";
 import SuggestedProducts from "../../components/suggested-products/suggestion";
+import ProducerProfileProduct from "../../components/productor-profile-product/ProducerProfileProduct";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -71,13 +72,27 @@ export default function ProfilPage() {
 
         const productsRes = await fetch("/api/products");
         const productsData = await productsRes.json();
-        const rawProducts = Array.isArray(productsData.products) ? productsData.products : Array.isArray(productsData) ? productsData : [];
+        const rawProducts = Array.isArray(productsData.data) ? productsData.data : Array.isArray(productsData) ? productsData : [];
 
         if (currentUser.role === "producer") {
           const ordersRes = await fetch("/api/orders/producer", { credentials: "include" });
           const ordersData = await ordersRes.json();
           if (ordersData.success) setOrders(ordersData.orders || []);
-          setCatalogue(rawProducts.filter((p: DBProduct) => String(p.producer_id) === String(currentUser.id)));
+
+          const producersRes = await fetch("/api/producers");
+          const producersData = await producersRes.json();
+          if (producersData.success && Array.isArray(producersData.data)) {
+            const currentProducer = producersData.data.find(
+              (p: any) => String(p.user_id) === String(currentUser.id)
+            );
+            if (currentProducer) {
+              setCatalogue(
+                rawProducts.filter(
+                  (p: DBProduct) => String(p.producer_id) === String(currentProducer.id)
+                )
+              );
+            }
+          }
         } else {
           const ordersRes = await fetch("/api/orders/user", { credentials: "include" });
           const ordersData = await ordersRes.json();
@@ -289,21 +304,14 @@ export default function ProfilPage() {
           {catalogue.length === 0 ? (
             <p className="text-xs italic text-[#714143] opacity-70">Aucun produit en vente.</p>
           ) : (
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2.5">
               {catalogue.map((prod) => (
-                <div key={prod.id} className="flex flex-col gap-1 items-center">
-                  <div className="relative w-full h-20 rounded-xl overflow-hidden bg-white border">
-                    <Image 
-                      src={prod.product_photo ? (prod.product_photo.startsWith("http") ? prod.product_photo : `/uploads/${prod.product_photo}`) : "/productplaceholder.png"} 
-                      alt={prod.product_name} 
-                      fill 
-                      className="object-cover" 
-                    />
-                  </div>
-                  <span className="text-[10px] text-center font-bold truncate w-full px-0.5 text-[#714143]">
-                    {prod.product_name}
-                  </span>
-                </div>
+                <ProducerProfileProduct
+                  key={prod.id}
+                  id={prod.id}
+                  name={prod.product_name}
+                  photoUrl={prod.product_photo}
+                />
               ))}
             </div>
           )}

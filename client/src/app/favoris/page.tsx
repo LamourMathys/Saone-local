@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import BoxandBouton from "../../components/boxandbouton-component/boxandbouton";
 import FavoriteItem from "../../components/favorite-item/FavoriteItem";
 
@@ -14,14 +15,22 @@ interface FavoriteItemData {
 }
 
 export default function Favoris() {
+  const router = useRouter();
   const [favorites, setFavorites] = useState<FavoriteItemData[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("/api/favorites/my")
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          router.push("/connexion");
+          return null;
+        }
+        return res.json();
+      })
       .then((resJson) => {
+        if (!resJson) return;
         if (resJson.success && Array.isArray(resJson.data)) {
           const mappedFavorites: FavoriteItemData[] = resJson.data.map((fav: any) => {
             const isProduct = !!fav.product_id;
@@ -50,14 +59,52 @@ export default function Favoris() {
       .catch((err) => {
         console.error("Erreur lors de la récupération des favoris:", err);
       });
-  }, []);
+  }, [router]);
 
   const handleRemoveFavorite = (id: number, type: "product" | "producer") => {
     setFavorites((prev) => prev.filter((item) => !(item.id === id && item.type === type)));
 
     fetch(`/api/favorites/${id}`, {
       method: "DELETE",
+    }).then((res) => {
+      if (res.status === 401 || res.status === 403) {
+        router.push("/connexion");
+      }
+      return res;
     }).catch((err) => console.error("Error deleting favorite:", err));
+  };
+
+  const handleAddToCart = async (productId: number, quantity: number) => {
+    try {
+      const res = await fetch("/api/orders/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          quantity: quantity,
+        }),
+      });
+
+      if (res.status === 401 || res.status === 403) {
+        router.push("/connexion");
+        return;
+      }
+
+      const contentType = res.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const resJson = await res.json();
+        if (resJson.success) {
+        } else {
+          alert(`Erreur: ${resJson.error || "Impossible d'ajouter le produit."}`);
+        }
+      } else {
+        alert(`Erreur serveur (${res.status}). Veuillez vérifier que le serveur backend a bien été redémarré.`);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const toggleSelectKey = (key: string) => {
@@ -163,6 +210,7 @@ export default function Favoris() {
                   isSelected={selectedKeys.includes(key)}
                   onSelectToggle={() => toggleSelectKey(key)}
                   onRemove={handleRemoveFavorite}
+                  onAddToCart={handleAddToCart}
                 />
               );
             })

@@ -36,11 +36,12 @@ export default function Panier() {
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
           router.push("/connexion");
-          throw new Error("Unauthorized");
+          return null;
         }
         return res.json();
       })
       .then((resJson) => {
+        if (!resJson) return;
         if (resJson.success && Array.isArray(resJson.data)) {
           setCartItems(resJson.data);
         }

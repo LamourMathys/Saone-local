@@ -14,6 +14,7 @@ interface FavoriteItemProps {
   isSelected?: boolean;
   onSelectToggle?: () => void;
   onRemove: (id: number, type: "product" | "producer") => void;
+  onAddToCart?: (id: number, quantity: number) => void;
 }
 
 export default function FavoriteItem({
@@ -26,6 +27,7 @@ export default function FavoriteItem({
   isSelected = false,
   onSelectToggle,
   onRemove,
+  onAddToCart,
 }: FavoriteItemProps) {
   const [quantity, setQuantity] = useState(0);
 
@@ -110,20 +112,33 @@ export default function FavoriteItem({
           </button>
         ) : (
           type === "product" ? (
-            <div className="flex items-center justify-between bg-[#FACA92] text-white rounded-lg px-2 py-1 w-22.5 font-bold text-sm shadow-sm">
-              <button
-                onClick={() => setQuantity(Math.max(0, quantity - 1))}
-                className="text-white active:scale-90 px-1 cursor-pointer"
-              >
-                -
-              </button>
-              <span>{quantity}</span>
-              <button
-                onClick={() => setQuantity(quantity + 1)}
-                className="text-white active:scale-90 px-1 cursor-pointer"
-              >
-                +
-              </button>
+            <div className="flex flex-col items-center gap-1.5">
+              <div className="flex items-center justify-between bg-[#FACA92] text-white rounded-lg px-2 py-1 w-22.5 font-bold text-sm shadow-sm">
+                <button
+                  onClick={() => setQuantity(Math.max(0, quantity - 1))}
+                  className="text-white active:scale-90 px-1 cursor-pointer"
+                >
+                  -
+                </button>
+                <span>{quantity}</span>
+                <button
+                  onClick={() => setQuantity(quantity + 1)}
+                  className="text-white active:scale-90 px-1 cursor-pointer"
+                >
+                  +
+                </button>
+              </div>
+              {quantity > 0 && onAddToCart && (
+                <button
+                  onClick={() => {
+                    onAddToCart(id, quantity);
+                    setQuantity(0);
+                  }}
+                  className="bg-[#9AA433] text-white text-[9px] font-bold py-1 px-2.5 rounded-md active:scale-95 transition-transform cursor-pointer shadow-sm"
+                >
+                  Ajouter au panier
+                </button>
+              )}
             </div>
           ) : (
             <Link
